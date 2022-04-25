@@ -18,9 +18,12 @@ class Officer extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'officer_first_name',
+        'officer_last_name',
+        'officer_post',
+        'officer_status',
+        'work_start_time',
+        'work_end_time',
     ];
 
     /**
@@ -29,7 +32,6 @@ class Officer extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        'password',
         'remember_token',
     ];
 

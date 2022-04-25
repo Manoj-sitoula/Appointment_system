@@ -17,12 +17,13 @@ Route::get('/', function () {
     return view('dashboard');
 })->name('home');
 
-Route::get('/officer', function () {
-    return view('officer');
-})->name('officer');
+// Route::get('/officer', function () {
+//     return view('officer');
+// })->name('officer');
 
 Route::get('/visitor', function () {
     return view('visitor');
 })->name('visitor');
 
+Route::get('/officer',[\App\Http\Controllers\officerController::class,'getOfficerDetails'])->name('officer');
 Route::post('/insertOfficer',[\App\Http\Controllers\officerController::class,'insertOfficer'])->name('insertOfficer');

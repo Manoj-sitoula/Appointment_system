@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('officer_first_name');
             $table->string('officer_last_name');
             $table->string('officer_post');
+            $table->string('officer_status');
             $table->time('work_start_time');
             $table->time('work_end _time');
             $table->rememberToken();

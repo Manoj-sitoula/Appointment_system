@@ -38,6 +38,7 @@ class visitorController extends Controller
    function getVisitorDetail($id)
    {
     $visitor = Visitor::find($id);
+
     return response()->json([
         'status'=>200,
         'visitor'=>$visitor,
@@ -46,15 +47,15 @@ class visitorController extends Controller
 
    function updateVisitor(Request $request)
    {
-
+  
     $request->validate([
         'new_visitor_first_name' => 'bail|required|min:3',
         'new_visitor_last_name' => 'bail|required|min:3',
         'new_phone_no' => 'required',
         'new_email' =>'required',
     ]);
-
-    $id = $request->user_id;
+    
+    $id = $request->visitor_id;
     $obj = Visitor::findOrFail($id);
 
     $obj->visitor_first_name = $request->new_visitor_first_name;
@@ -65,5 +66,23 @@ class visitorController extends Controller
     $obj->update();
     return redirect()->back()->with('success','You have successfully updated an Visitor');
    }
+
    
+   function updateVisitorStatus(Request $req)
+   {
+    $id = $req->user_id;
+    $status = $req->status_value;
+    $obj = Visitor::findOrFail($id);
+
+    if($status == 'active')
+    {
+        $obj->status = 'inactive';
+    }else{
+        $obj->status = 'active';
+    }
+    
+    $obj->update();
+    
+    return redirect()->back()->with('success','Status changed Successfully');
+   }
 }

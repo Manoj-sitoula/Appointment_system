@@ -57,8 +57,8 @@ class officerController extends Controller
             'new_work_start_time' => 'required',
             'new_work_end_time' => 'required',
         ]);
-
-        $id = $req->user_id;
+        
+        $id = $req->officer_id;
         $obj = Officer::findOrFail($id);
 
         $obj->officer_first_name = $req->new_officer_first_name;
@@ -70,4 +70,22 @@ class officerController extends Controller
         $obj->update();
         return redirect()->back()->with('success','You have successfully Updated an Officer');
     }
+
+    function updateOfficerStatus(Request $req)
+   {
+        $id = $req->user_id;
+        $status = $req->status_value;
+        $obj = Officer::findOrFail($id);
+
+        if($status == 'active')
+        {
+            $obj->officer_status = 'inactive';
+        }else{
+            $obj->officer_status = 'active';
+        }
+        
+        $obj->update();
+        
+        return redirect()->back()->with('success','Status changed Successfully');
+   }
 }

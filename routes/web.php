@@ -31,6 +31,7 @@ Route::get('/officer',[\App\Http\Controllers\officerController::class,'getOffice
 Route::post('/insertOfficer',[\App\Http\Controllers\officerController::class,'insertOfficer'])->name('insertOfficer');
 Route::get('/getOfficerDetail/{id}',[\App\Http\Controllers\officerController::class,'getOfficerDetail'])->name('getOfficerDetail');
 Route::put('/updateOfficer',[\App\Http\Controllers\officerController::class,'updateOfficer'])->name('updateOfficer');
+Route::put('/updateOfficerStatus',[\App\Http\Controllers\officerController::class,'updateOfficerStatus'])->name('updateOfficerStatus');
 
 
 // for Visitor
@@ -38,3 +39,7 @@ Route::get('/visitor',[\App\Http\Controllers\visitorController::class,'getVisito
 Route::post('/insertVisitor',[\App\Http\Controllers\visitorController::class,'insertVisitor'])->name('insertVisitor');
 Route::get('/getVisitorDetail/{id}',[\App\Http\Controllers\visitorController::class,'getVisitorDetail'])->name('getVisitorDetail');
 Route::put('/updateVisitor',[\App\Http\Controllers\visitorController::class,'updateVisitor'])->name('updateVisitor');
+Route::put('/updateVisitorStatus',[\App\Http\Controllers\visitorController::class,'updateVisitorStatus'])->name('updateVisitorStatus');
+
+// for Activity
+Route::get('/activity',[\App\Http\Controllers\activityController::class,'getActivitiesDetails'])->name('activity');

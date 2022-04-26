@@ -67,7 +67,7 @@
                 type:"GET",
                 url:"getOfficerDetail/"+user_id,
                 success:function(response){
-                    $('#user_id').val(response.officer.id);
+                    $('#officer_id').val(response.officer.id);
                     $('#new_officer_first_name').val(response.officer.officer_first_name);
                     $('#new_officer_last_name').val(response.officer.officer_last_name);
                     $('#new_post').val(response.officer.officer_post);

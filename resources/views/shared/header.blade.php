@@ -35,6 +35,9 @@
                 <li>
                     <a href="{{route('visitor')}}">Visitor</a>
                 </li>
+                <li>
+                    <a href="{{route('activity')}}">Activity</a>
+                </li>
 
             </ul>
         </nav>
@@ -51,7 +54,7 @@
                 </div>
             </nav>
 
-            @yield('content');
+            @yield('content')
    
         </div>
     </div>

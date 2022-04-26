@@ -40,9 +40,25 @@
             <td>{{$data->mobile_number}}</td>
             <td>{{$data->email}}</td>
             @if ($data->status == 'active')
-                <td><button class="btn btn-sm btn-success">Active</button></td>
+                <td>
+                    <form action="{{route('updateVisitorStatus')}}" method="POST">
+                        @csrf
+                        @method('put')
+                        <input type="hidden" name="user_id" id="user_id" value="{{$data->id}}">
+                        <input type="hidden" name="status_value" id="status_value" value="{{$data->status}}">
+                        <button class="btn btn-sm btn-success" >Active</button>
+                    </form>
+                </td>
             @elseif($data->status == 'inactive')
-                <td><button class="btn btn-sm btn-danger">InActive</button></td>
+                <td>
+                    <form action="{{route('updateVisitorStatus')}}" method="POST">
+                        @csrf
+                        @method('put')
+                        <input type="hidden" name="user_id" id="user_id" value="{{$data->id}}">
+                        <input type="hidden" name="status_value" id="status_value" value="{{$data->status}}">
+                        <button class="btn btn-sm btn-danger">InActive</button>
+                    </form>
+                </td>
             @endif
             <td>
                 <div class="row">
@@ -151,7 +167,7 @@
                   @csrf
                   @method('put')
 
-                  <input type="hidden" name="user_id" id="user_id">
+                  <input type="hidden" name="visitor_id" id="visitor_id">
                   <div class="card-body p-0">
                       <div class="row">
                           <div class="col">

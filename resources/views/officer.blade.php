@@ -40,9 +40,27 @@
             <td>{{$data->officer_first_name}} {{$data->officer_last_name}}</td>
             <td>{{$data->officer_post}}</td>
             @if ($data->officer_status == 'active')
-                <td><button class="btn btn-sm btn-success">Active</button></td>
+                <td>
+                    <form action="{{route('updateOfficerStatus')}}" method="POST">
+                        @csrf
+                        @method('put')
+                        <input type="hidden" name="user_id" id="user_id" value="{{$data->id}}">
+                        <input type="hidden" name="status_value" id="status_value" value="{{$data->officer_status}}">
+                        <button class="btn btn-sm btn-success">Active</button>
+                    </td>
+                    </form>
+                    
             @elseif($data->officer_status == 'inactive')
-                <td><button class="btn btn-sm btn-danger">InActive</button></td>
+                <td>
+                    <form action="{{route('updateOfficerStatus')}}" method="POST">
+                        @csrf
+                        @method('put')
+                        <input type="hidden" name="user_id" id="user_id" value="{{$data->id}}">
+                        <input type="hidden" name="status_value" id="status_value" value="{{$data->officer_status}}">
+                    <button class="btn btn-sm btn-danger">InActive</button>
+                    </form>
+                    
+                </td>
             @endif
             <td>{{$data->work_start_time}}</td>
             <td>{{$data->work_end_time}}</td>
@@ -168,7 +186,7 @@
                   @csrf
                   @method('put')
 
-                  <input type="hidden" name="user_id" id="user_id">
+                  <input type="hidden" name="officer_id" id="officer_id">
                   <div class="card-body p-0">
                       <div class="row">
                           <div class="col">

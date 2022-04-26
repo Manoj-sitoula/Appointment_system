@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('visitor_first_name');
             $table->string('visitor_last_name');
             $table->string('mobile_number');
-            $table->time('email');
-            $table->time('status');
+            $table->string('email');
+            $table->string('status');
             $table->rememberToken();
             $table->timestamps();
         });

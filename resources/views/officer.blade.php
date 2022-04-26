@@ -48,10 +48,10 @@
             <td>{{$data->work_end_time}}</td>
             <td>
                 <div class="row">
-                    <div class="col-4">
+                    <div class="col-lg-4 col-xl-6 col-md-12 col-sm-12 col">
                         <button type="button" class="btn btn-info" id="updatebtn" data-bs-toggle="modal" data-bs-target="#updateOfficer" value="{{$data->id}}">Update</button>
                     </div>
-                    <div class="col-6">
+                    <div class="col-lg-6 col-xl-6 col-md-12 col-sm-12">
                         <button class="btn btn-info">Appointment</button>
                     </div>
                 </div>
@@ -166,7 +166,9 @@
         <div class="modal-body">
           <form method="POST" action="{{route('updateOfficer')}}" enctype="multipart/form-data">
                   @csrf
+                  @method('put')
 
+                  <input type="hidden" name="user_id" id="user_id">
                   <div class="card-body p-0">
                       <div class="row">
                           <div class="col">
@@ -196,6 +198,7 @@
                               </div>
                           </div>
                       </div>
+                      
                       <div class="row">
                           <div class="col">
                               <div class="form-group">
@@ -231,5 +234,5 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.0/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/js/tempusdominus-bootstrap-4.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/css/tempusdominus-bootstrap-4.min.css"/>
-<script src="{{asset('assets/js/custom_js/custom.js')}}"></script>
+<script src="{{asset('assets/js/custom_js/customOfficer.js')}}"></script>
 @endsection

@@ -63,12 +63,11 @@
     $(document).ready(function(){
         $(document).on('click','#updatebtn',function(){
             var user_id = $(this).val();
-            console.log(user_id);
             $.ajax({
                 type:"GET",
                 url:"getOfficerDetail/"+user_id,
                 success:function(response){
-                   console.log(response);
+                    $('#user_id').val(response.officer.id);
                     $('#new_officer_first_name').val(response.officer.officer_first_name);
                     $('#new_officer_last_name').val(response.officer.officer_last_name);
                     $('#new_post').val(response.officer.officer_post);

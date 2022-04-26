@@ -6,5 +6,200 @@
     <span class="breadcrumb-item" >Dashboard</span>
     <span class="breadcrumb-item" >Visitor</span>
 </nav>
-<h1> Welcome to Visitor</h1>
+@if ($message = Session::get('success'))
+        <div class="alert alert-success" role="alert">
+            {{ $message }}
+        </div>
+    @endif
+ 
+<table class="table">
+    <thead>
+        <tr>
+            <th colspan="5">
+            </th>
+            <th colspan="1">
+                <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#addVisitor">
+                  Add New
+                </button>
+            </th>
+        </tr>
+        <tr>
+            <th scope="col">Visitor Id</th>
+            <th scope="col">Name</th>
+            <th scope="col">Contact</th>
+            <th scope="col">Email</th>
+            <th scope="col">Status</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach ( $value as $data)
+        <tr>
+            <td>{{$data->id}}</td>
+            <td>{{$data->visitor_first_name}} {{$data->visitor_last_name}}</td>
+            <td>{{$data->mobile_number}}</td>
+            <td>{{$data->email}}</td>
+            @if ($data->status == 'active')
+                <td><button class="btn btn-sm btn-success">Active</button></td>
+            @elseif($data->status == 'inactive')
+                <td><button class="btn btn-sm btn-danger">InActive</button></td>
+            @endif
+            <td>
+                <div class="row">
+                    <div class="col-4">
+                        <button type="button" class="btn btn-info" id="updatebtn" data-bs-toggle="modal" data-bs-target="#updateVisitor" value="{{$data->id}}">Update</button>
+                    </div>
+                    <div class="col-6">
+                        <button class="btn btn-info">Appointment</button>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        @endforeach
+    </tbody>  
+</table>
+
+<!--Insert Modal -->
+<div class="modal fade" id="addVisitor" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addVisitorLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title mx-auto  " id="addVisitorLabel">Add Visitor</h5>
+          <button type="button" class="btn" data-bs-dismiss="modal"><i class="fas fa-x"></i></button>
+        </div>
+        <div class="modal-body">
+          <form method="POST" action="{{route('insertVisitor')}}" enctype="multipart/form-data">
+                  @csrf
+                  <div class="card-body p-0">
+                      <div class="row">
+                          <div class="col">
+                              <div class="form-group">
+                                  <label for="full name">First Name<span class="text-danger">*</span></label>
+                                  <input type="text" class="form-control col" placeholder="First name" required="" id="visitor_first_name" name="visitor_first_name" maxlength="30" autocomplete="off" />
+                                  <div class="invalid-feedback">Please enter first name.</div>
+                              </div>
+                          </div>
+                          <div class="col">
+                              <div class="form-group">
+                                  <label for="full name">Last Name<span class="text-danger">*</span></label>
+                                  <input type="text" class="form-control col" placeholder=" Last name" required="" id="visitor_last_name" name="visitor_last_name" maxlength="30" autocomplete="off" />
+                                  <div class="invalid-feedback">Please enter last name.</div>
+                              </div>
+                          </div>
+                      </div>
+                          <div class="col">
+                              <div class="form-group">
+                                  <label for="phone">Phone No:<span class="text-danger">*</span></label>
+                                  <div class="input-group">
+                                        <input type="text" placeholder="Phone No" name="phone_no" id="phone_no" class="form-control" required autocomplete="off" />
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col">
+                              <div class="form-group">
+                                  <label for="phone">Email:<span class="text-danger">*</span></label>
+                                  <div class="input-group">
+                                        <input type="text" placeholder="Email" name="email" id="email" class="form-control" required autocomplete="off" />
+                                  </div>
+                              </div>
+                          </div> 
+
+                          <div class="col">
+                            <div class="form-group">
+                                <label for="status">Status:<span class="text-danger">*</span></label><br>
+                                <div class="row ">
+                                    <div class="col-5 d-flex">
+                                        <input class="form-check-input mx-2" type="radio" name="status" id="status" value="active" checked>
+                                        <label class="form-check-label pt-1 " for="status">
+                                            Active
+                                        </label>
+                                    </div>
+                                    <div class="col-6 d-flex">
+                                        <input class="form-check-input mx-2" type="radio" name="status" id="status" value="inactive" >
+                                        <label class="form-check-label pt-1" for="status">
+                                            UnActive
+                                        </label>  
+                                    </div>  
+                                </div>
+                            </div>
+                        </div> 
+                      
+                      <div class="row my-2 mt-2">
+                          <div class="col mb-3 text-center">
+                              <button class="btn btn-info" id="register" type="submit" >Insert</button>
+                          </div>
+                      </div>
+                  </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  {{-- End Insert Modal --}}
+
+  {{-- Start  Update Model --}}
+
+  <div class="modal fade" id="updateVisitor" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="updateVisitorLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title mx-auto  " id="updateVisitorLabel">Update Visitor</h5>
+          <button type="button" class="btn" data-bs-dismiss="modal"><i class="fas fa-x"></i></button>
+        </div>
+        <div class="modal-body">
+          <form method="POST" action="{{route('updateVisitor')}}" enctype="multipart/form-data">
+                  @csrf
+                  @method('put')
+
+                  <input type="hidden" name="user_id" id="user_id">
+                  <div class="card-body p-0">
+                      <div class="row">
+                          <div class="col">
+                              <div class="form-group">
+                                  <label for="full name">First Name<span class="text-danger">*</span></label>
+                                  <input type="text" class="form-control col" placeholder="First name" required="" id="new_visitor_first_name" name="new_visitor_first_name" maxlength="30" autocomplete="off" />
+                                  <div class="invalid-feedback">Please enter first name.</div>
+                              </div>
+                          </div>
+                          <div class="col">
+                              <div class="form-group">
+                                  <label for="full name">Last Name<span class="text-danger">*</span></label>
+                                  <input type="text" class="form-control col" placeholder=" Last name" required="" id="new_visitor_last_name" name="new_visitor_last_name" maxlength="30" autocomplete="off" />
+                                  <div class="invalid-feedback">Please enter last name.</div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col">
+                        <div class="form-group">
+                            <label for="phone">Phone No:<span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                  <input type="text" placeholder="Phone No" name="new_phone_no" id="new_phone_no" class="form-control" required autocomplete="off" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="phone">Email:<span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                  <input type="text" placeholder="Email" name="new_email" id="new_email" class="form-control" required autocomplete="off" />
+                            </div>
+                        </div>
+                    </div> 
+                      
+                      <div class="row my-2">
+                          <div class="col mb-3 text-center">
+                              <button class="btn btn-info" id="register" type="submit">Update</button>
+                          </div>
+                      </div>
+                  </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {{-- End Update Model --}}
+
+  <script src="{{asset('assets/js/custom_js/customVisitor.js')}}"></script>
+
 @endsection

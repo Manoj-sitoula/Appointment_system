@@ -8,7 +8,7 @@ use App\Models\Officer;
 class officerController extends Controller
 {
 
-    function getOfficerDetails()
+    function getOfficersDetails()
    {
       $data = Officer::paginate(10);
       return view('officer',['value'=>$data]); 
@@ -40,6 +40,14 @@ class officerController extends Controller
 
     }
 
+    function getOfficerDetail($id)
+    {
+        $officer = Officer::find($id);
+        return response()->json([
+            'status'=>200,
+            'officer'=>$officer,
+        ]);
+    }
 
     function updateOfficer(){
         return "Hello World";

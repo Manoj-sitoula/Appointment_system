@@ -17,13 +17,6 @@
         format: 'HH:mm'
     });
 
-    //  $(document).ready(function(){
-    //     $(document).on('click','#addOfficerbtn',function(){
-    //         jQuery.noConflict(); 
-    //         $('#addOfficer').modal('show');
-    //     });
-    // });
-
     let firstName = document.querySelector("#officer_first_name");
     let lastName = document.querySelector("#officer_last_name");
     
@@ -65,4 +58,25 @@
             register.setAttribute("disabled", "disabled");
         }
     }, 500);
+
+
+    $(document).ready(function(){
+        $(document).on('click','#updatebtn',function(){
+            var user_id = $(this).val();
+            console.log(user_id);
+            $.ajax({
+                type:"GET",
+                url:"getOfficerDetail/"+user_id,
+                success:function(response){
+                   console.log(response);
+                    $('#new_officer_first_name').val(response.officer.officer_first_name);
+                    $('#new_officer_last_name').val(response.officer.officer_last_name);
+                    $('#new_post').val(response.officer.officer_post);
+                    $('#new_work_start_time').val(response.officer.work_start_time);
+                    $('#new_work_end_time').val(response.officer.work_end_time);
+                }
+
+            });
+        });
+    });
     

@@ -27,3 +27,5 @@ Route::get('/visitor', function () {
 
 Route::get('/officer',[\App\Http\Controllers\officerController::class,'getOfficerDetails'])->name('officer');
 Route::post('/insertOfficer',[\App\Http\Controllers\officerController::class,'insertOfficer'])->name('insertOfficer');
+
+Route::post('/updateOfficer',[\App\Http\Controllers\officerController::class,'updateOfficer'])->name('updateOfficer');

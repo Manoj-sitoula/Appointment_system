@@ -17,15 +17,17 @@ class officerController extends Controller
     function insertOfficer(Request $request){
         
      $obj = new Officer();
+
         // $request->validate([
-        //     $request->officer_first_name => ['bail','required'],
-        //     $request->officer_last_name => ['bail','required'],
-        //     $request->post => ['bail','required'],
-        //     $request->status => ['bail','required'],
-        //     $request->work_start_time => ['bail','required'],
-        //     $request->work_end_time => ['bail','required'],
+        //     $request->officer_first_name => 'required',
+        //     $request->officer_last_name => 'required',
+        //     $request->post => 'required',
+        //     $request->status => 'required',
+        //     $request->work_start_time => 'required',
+        //     $request->work_end_time => 'required',
         // ]);
 
+    
         $obj->officer_first_name = $request->officer_first_name;
         $obj->officer_last_name = $request->officer_last_name;
         $obj->officer_post = $request->post;
@@ -36,5 +38,10 @@ class officerController extends Controller
         $obj->save();
         return redirect()->back()->with('success','You have successfully added an Officer');
 
+    }
+
+
+    function updateOfficer(){
+        return "Hello World";
     }
 }

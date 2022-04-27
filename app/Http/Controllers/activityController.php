@@ -10,13 +10,20 @@ class activityController extends Controller
 {
     function getActivitiesDetails()
     {
-        // $activitydata = Activity::paginate(10);
-        // return view('activity',['value'=>$activitydata]);
-
-        $activitydata = DB::table('officers')
-        ->join('activities','activities.officer_id','=','officers.id')
+        $activity['a'] = Activity::join('officers','activities.officer_id','=','officers.id')
+        ->join('visitors','activities.visitor_id','=','visitors.id')
         ->get();
 
-        return view('activity',['value'=>$activitydata]);
+        $activity['b'] = DB::table('officers')->get()->all();
+
+        $activity['c'] = DB::table('visitors')->get()->all();
+
+        return view('activity',['value'=>$activity]);
+
+    }
+
+    function insertActivity(Request $request)
+    {
+        return $request;
     }
 }

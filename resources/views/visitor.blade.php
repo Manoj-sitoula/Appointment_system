@@ -66,7 +66,7 @@
                     <div class="col col-sm-12 col-md-12 col-xl-6 col-lg-6">
                         <button type="button" class="btn btn-info" id="updatebtn" data-bs-toggle="modal" data-bs-target="#updateVisitor" value="{{$data->id}}">Update</button>
                     </div>
-                    <div class="col-6 col-sm-12 col-md-12 col-xl-6 col-lg-6">
+                    <div class="col col-sm-12 col-md-12 col-xl-6 col-lg-6">
                         <button class="btn btn-info">Appointment</button>
                     </div>
                 </div>

@@ -4,13 +4,17 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
-      <link rel="stylesheet" href="{{asset('assets/css/app.css')}}">
-      <link rel="stylesheet" href="{{asset('assets/css/all.min.css')}}">
-      <link rel="stylesheet" href="{{asset('assets/css/fontawesome.min.css')}}">
-      <link rel="stylesheet" href="{{asset('assets/css/bootstrap.min.css')}}" >
+    <link rel="stylesheet" href="{{asset('assets/css/app.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/css/all.min.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/css/fontawesome.min.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/css/bootstrap.min.css')}}" >
+    <link rel="stylesheet" href="{{asset('assets/css/jquery-ui.css')}}" >
+    <link rel="stylesheet" href="{{asset('assets/css/chosen.min.css')}}" >
 
-      <script src="{{asset('assets/js/bootstrap.bundle.min.js')}}"></script>
+    <script src="{{asset('assets/js/bootstrap.bundle.min.js')}}"></script>
     <script src="{{asset('assets/js/jquery.min.js')}}" ></script>
+    <script src="{{asset('assets/js/jquery-ui.min.js')}}" ></script>
+    <script src="{{asset('assets/js/chosen.jquery.min.js')}}" ></script>
 
 	<title>Office Appointment System</title>
     <style type="text/css">

@@ -37,3 +37,4 @@ Route::put('/updateVisitorStatus',[visitorController::class,'updateVisitorStatus
 
 // for Activity
 Route::get('/activity',[\App\Http\Controllers\activityController::class,'getActivitiesDetails'])->name('activity');
+Route::post('/insertActivity',[activityController::class,'insertActivity'])->name('insertActivity');

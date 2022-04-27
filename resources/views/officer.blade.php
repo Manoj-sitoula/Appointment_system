@@ -161,7 +161,8 @@
                         </div> 
                     </div>
                     <div class="row">
-                        <div class="form-check form-check-inline">
+                        <div class="form-check form-check-inline form-group">
+                            <label for="new_work_end_time">Work Days<span class="text-danger">*</span></label>
                             <div class="input-group">
                                 <div class="col">
                                     <input class="form-check-input" type="checkbox" name="days[]" id="sunday" value="sunday">

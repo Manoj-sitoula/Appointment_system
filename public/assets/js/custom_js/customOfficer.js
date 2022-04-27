@@ -79,6 +79,7 @@
                     $('#new_post').val(response.officer.officer_post);
                     $('#new_work_start_time').val(response.officer.work_start_time);
                     $('#new_work_end_time').val(response.officer.work_end_time);
+
                 }
 
             });

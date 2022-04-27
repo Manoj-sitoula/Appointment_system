@@ -51,7 +51,7 @@ class officerController extends Controller
     function getOfficerDetail($id)
     {
         $officer = Officer::find($id);
-        $workdays = WorkDays::where('officer_id', $id)->get();;
+        $workdays = WorkDays::where('officer_id', $id)->get();
         return response()->json([
             'status'=>200,
             'officer'=>$officer,

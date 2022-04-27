@@ -67,6 +67,12 @@
                 type:"GET",
                 url:"getOfficerDetail/"+user_id,
                 success:function(response){
+
+                    // if(response.workdays[0].day_of_week == 'sunday')
+                    // {
+                    //     $('#newsunday').prop("checked", true);;
+                    // }
+
                     $('#officer_id').val(response.officer.id);
                     $('#new_officer_first_name').val(response.officer.officer_first_name);
                     $('#new_officer_last_name').val(response.officer.officer_last_name);

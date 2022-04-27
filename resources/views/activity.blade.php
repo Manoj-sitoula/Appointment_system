@@ -24,8 +24,8 @@
         </tr>
         <tr>
           <th scope="col">Id</th>
-          <th scope="col">Officer Id</th>
-          <th scope="col">Visitor Id</th>
+          <th scope="col">Officer Name</th>
+          <th scope="col">Visitor Name</th>
           <th scope="col">Name</th>
           <th scope="col">Type</th>
           <th scope="col">Status</th>
@@ -37,10 +37,11 @@
         </tr>
     </thead>
     <tbody>
+        <?php $count = 1; ?>
         @foreach ( $value as $data)
         <tr>
-            <td>{{$data->id}}</td>
-            <td>{{$data->officer_id}}</td>
+            <td>{{$count}}</td>
+            <td> {{$data->officer_first_name}} {{$data->officer_last_name}}</td>
             <td>{{$data->visitor_id}}</td>
             <td>{{$data->name}}</td>
             <td>{{$data->type}}</td>
@@ -82,6 +83,7 @@
                 </div>
             </td>
         </tr>
+        <?php $count++ ?>
         @endforeach
     </tbody>
     

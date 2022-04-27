@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('officer_id');
             $table->foreign('officer_id')->references('id')->on('officers');
-            $table->unsignedBigInteger('visitor_id')->nullable();
+            $table->unsignedBigInteger('visitor_id')->null;
             $table->foreign('visitor_id')->references('id')->on('visitors');
             $table->string('name');
             $table->string('type');

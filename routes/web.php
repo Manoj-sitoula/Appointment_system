@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\activityController;
+use App\Http\Controllers\officerController;
+use App\Http\Controllers\visitorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,29 +20,20 @@ Route::get('/', function () {
     return view('dashboard');
 })->name('home');
 
-// Route::get('/officer', function () {
-//     return view('officer');
-// })->name('officer');
-
-// Route::get('/visitor', function () {
-//     return view('visitor');
-// })->name('visitor');
-
 
 // for Officer
-Route::get('/officer',[\App\Http\Controllers\officerController::class,'getOfficersDetails'])->name('officer');
-Route::post('/insertOfficer',[\App\Http\Controllers\officerController::class,'insertOfficer'])->name('insertOfficer');
-Route::get('/getOfficerDetail/{id}',[\App\Http\Controllers\officerController::class,'getOfficerDetail'])->name('getOfficerDetail');
-Route::put('/updateOfficer',[\App\Http\Controllers\officerController::class,'updateOfficer'])->name('updateOfficer');
-Route::put('/updateOfficerStatus',[\App\Http\Controllers\officerController::class,'updateOfficerStatus'])->name('updateOfficerStatus');
-
+Route::get('/officer',[officerController::class,'getOfficersDetails'])->name('officer');
+Route::post('/insertOfficer',[officerController::class,'insertOfficer'])->name('insertOfficer');
+Route::get('/getOfficerDetail/{id}',[officerController::class,'getOfficerDetail'])->name('getOfficerDetail');
+Route::put('/updateOfficer',[officerController::class,'updateOfficer'])->name('updateOfficer');
+Route::put('/updateOfficerStatus',[officerController::class,'updateOfficerStatus'])->name('updateOfficerStatus');
 
 // for Visitor
-Route::get('/visitor',[\App\Http\Controllers\visitorController::class,'getVisitorsDetails'])->name('visitor');
-Route::post('/insertVisitor',[\App\Http\Controllers\visitorController::class,'insertVisitor'])->name('insertVisitor');
-Route::get('/getVisitorDetail/{id}',[\App\Http\Controllers\visitorController::class,'getVisitorDetail'])->name('getVisitorDetail');
-Route::put('/updateVisitor',[\App\Http\Controllers\visitorController::class,'updateVisitor'])->name('updateVisitor');
-Route::put('/updateVisitorStatus',[\App\Http\Controllers\visitorController::class,'updateVisitorStatus'])->name('updateVisitorStatus');
+Route::get('/visitor',[visitorController::class,'getVisitorsDetails'])->name('visitor');
+Route::post('/insertVisitor',[visitorController::class,'insertVisitor'])->name('insertVisitor');
+Route::get('/getVisitorDetail/{id}',[visitorController::class,'getVisitorDetail'])->name('getVisitorDetail');
+Route::put('/updateVisitor',[visitorController::class,'updateVisitor'])->name('updateVisitor');
+Route::put('/updateVisitorStatus',[visitorController::class,'updateVisitorStatus'])->name('updateVisitorStatus');
 
 // for Activity
 Route::get('/activity',[\App\Http\Controllers\activityController::class,'getActivitiesDetails'])->name('activity');

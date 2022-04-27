@@ -33,9 +33,10 @@
         </tr>
     </thead>
     <tbody>
+        <?php $count = 1; ?>
         @foreach ( $value as $data)
         <tr>
-            <td>{{$data->id}}</td>
+            <td>{{$count}}</td>
             <td>{{$data->visitor_first_name}} {{$data->visitor_last_name}}</td>
             <td>{{$data->mobile_number}}</td>
             <td>{{$data->email}}</td>
@@ -62,15 +63,16 @@
             @endif
             <td>
                 <div class="row">
-                    <div class="col-4">
+                    <div class="col col-sm-12 col-md-12 col-xl-6 col-lg-6">
                         <button type="button" class="btn btn-info" id="updatebtn" data-bs-toggle="modal" data-bs-target="#updateVisitor" value="{{$data->id}}">Update</button>
                     </div>
-                    <div class="col-6">
+                    <div class="col-6 col-sm-12 col-md-12 col-xl-6 col-lg-6">
                         <button class="btn btn-info">Appointment</button>
                     </div>
                 </div>
             </td>
         </tr>
+        <?php $count++ ?>
         @endforeach
     </tbody>  
 </table>

@@ -23,8 +23,10 @@ class visitorController extends Controller
            'status' => 'required',
        ]);
 
+       $id = rand(time(), 10000);
        $visitor = new Visitor();
 
+       $visitor->id = $id;
        $visitor->visitor_first_name = $request->visitor_first_name;
        $visitor->visitor_last_name = $request->visitor_last_name;
        $visitor->mobile_number = $request->phone_no;

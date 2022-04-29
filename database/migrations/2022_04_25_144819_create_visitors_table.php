@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('visitor_last_name');
             $table->string('mobile_number');
             $table->string('email');
-            $table->string('status');
+            $table->string('visitor_status');
             $table->rememberToken();
             $table->timestamps();
         });

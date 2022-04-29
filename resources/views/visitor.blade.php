@@ -33,21 +33,21 @@
             <td>{{$data->visitor_first_name}} {{$data->visitor_last_name}}</td>
             <td>{{$data->mobile_number}}</td>
             <td>{{$data->email}}</td>
-            @if ($data->status == 'active')
+            @if ($data->visitor_status == 'active')
                 <td>
                     <form action="{{route('updateVisitorStatus')}}" method="POST">
                         @csrf
                         @method('put')
-                        <input type="hidden" name="status_value" id="status_value" value="{{$data->status}}">
+                        <input type="hidden" name="status_value" id="status_value" value="{{$data->visitor_status}}">
                         <button class="btn btn-sm btn-success" name="user_id" value="{{$data->id}}">Active</button>
                     </form>
                 </td>
-            @elseif($data->status == 'inactive')
+            @elseif($data->visitor_status == 'inactive')
                 <td>
                     <form action="{{route('updateVisitorStatus')}}" method="POST">
                         @csrf
                         @method('put')
-                        <input type="hidden" name="status_value" id="status_value" value="{{$data->status}}">
+                        <input type="hidden" name="status_value" id="status_value" value="{{$data->visitor_status}}">
                         <button class="btn btn-sm btn-danger" name="user_id" value="{{$data->id}}">InActive</button>
                     </form>
                 </td>

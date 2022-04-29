@@ -32,7 +32,7 @@ class visitorController extends Controller
        $visitor->visitor_last_name = $request->visitor_last_name;
        $visitor->mobile_number = $request->phone_no;
        $visitor->email = $request->email;
-       $visitor->status = $request->status;
+       $visitor->visitor_status = $request->status;
 
        $visitor->save();
        return redirect()->back()->with('success','You have successfully added an Visitor');
@@ -73,15 +73,16 @@ class visitorController extends Controller
    
    function updateVisitorStatus(Request $req)
    {
+
     $id = $req->user_id;
     $status = $req->status_value;
     $obj = Visitor::findOrFail($id);
 
     if($status == 'active')
     {
-        $obj->status = 'inactive';
+        $obj->visitor_status = 'inactive';
     }else{
-        $obj->status = 'active';
+        $obj->visitor_status = 'active';
     }
     
     $obj->update();

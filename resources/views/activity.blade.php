@@ -72,8 +72,8 @@
                         <input type="hidden" name="activity_id" id="activity_id" value="{{$data->id}}">
                         <input type="hidden" name="status_value" id="status_value" value="{{$data->status}}">
                         <button class="btn btn-sm btn-success">Active</button>
-                    </td>
                     </form>
+                </td>
                     
             @elseif($data->status == 'inactive')
                 <td>
@@ -84,7 +84,6 @@
                         <input type="hidden" name="status_value" id="status_value" value="{{$data->status}}">
                     <button class="btn btn-sm btn-danger">InActive</button>
                     </form>
-                    
                 </td>
             @endif
             <td>{{$data->date}}</td>
@@ -143,7 +142,7 @@
                                 <select class=" chosen form-select" searchable="Search here.." name="visitor_id">
                                     <option value="" disabled selected>Select Visitor</option>
                                     @foreach ( $value['c'] as $res)
-                                    @if ($res->status == 'inactive')
+                                    @if ($res->visitor_status == 'inactive')
                                         {
                                         }@else
                                         { 

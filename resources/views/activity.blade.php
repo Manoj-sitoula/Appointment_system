@@ -66,10 +66,12 @@
             @endif 
             @if ($data->status == 'active')
                 <td>
-                    <form action="" method="POST">
+                    <form action="{{route('updateActivityStatus')}}" method="POST">
                         @csrf
                         @method('put')
-                        <input type="hidden" name="activity_id" id="activity_id" value="{{$data->id}}">
+                        <input type="hidden" name="officer_id" id="officer_id" value="{{$data->officer_id}}">
+                        <input type="hidden" name="visitor_id" id="visitor_id" value="{{$data->visitor_id}}">
+                        <input type="hidden" name="activity_id" id="activity_id" value="{{$data->activity_id}}">
                         <input type="hidden" name="status_value" id="status_value" value="{{$data->status}}">
                         <button class="btn btn-sm btn-success">Active</button>
                     </form>
@@ -77,13 +79,19 @@
                     
             @elseif($data->status == 'inactive')
                 <td>
-                    <form action="" method="POST">
+                    <form action="{{route('updateActivityStatus')}}" method="POST">
                         @csrf
                         @method('put')
-                        <input type="hidden" name="activity_id" id="activity_id" value="{{$data->id}}">
+                        <input type="hidden" name="officer_id" id="officer_id" value="{{$data->officer_id}}">
+                        <input type="hidden" name="visitor_id" id="visitor_id" value="{{$data->visitor_id}}">
+                        <input type="hidden" name="activity_id" id="activity_id" value="{{$data->activity_id}}">
                         <input type="hidden" name="status_value" id="status_value" value="{{$data->status}}">
                     <button class="btn btn-sm btn-danger">InActive</button>
                     </form>
+                </td>
+            @else
+                <td>
+                    <button class="btn btn-sm btn-warning">Cancelled</button>
                 </td>
             @endif
             <td>{{$data->date}}</td>
@@ -92,10 +100,16 @@
             <td>
                 <div class="row">
                     <div class="col-lg-4 col-xl-5 col-md-12 col-sm-12 col">
-                        <button type="button" class="btn btn-info btn-sm" id="updatebtn" data-bs-toggle="modal" data-bs-target="#updateActivity" value="{{$data->id}}">Update</button>
+                        <button type="button" class="btn btn-info btn-sm" id="updatebutton" data-bs-toggle="modal" data-bs-target="#updateActivity" value="{{$data->activity_id}}">Update</button>
                     </div>
                     <div class="col-lg-5 col-xl-5 col-md-12 col-sm-12">
-                        <button class="btn btn-info btn-sm">Cancel</button>
+                        <form action="{{route('cancelActivity')}}" method="POST">
+                            @csrf
+                            @method('put')
+                            <input type="hidden" name="activity_id" id="activity_id" value="{{$data->activity_id}}">
+                            <input type="hidden" name="status_value" id="status_value" value="{{$data->status}}">
+                        <button class="btn btn-sm btn-danger">Cancel</button>
+                        </form>
                     </div>
                 </div>
             </td>
@@ -111,7 +125,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title mx-auto  " id="addActivityLabel">Add Officer</h5>
+          <h5 class="modal-title mx-auto  " id="addActivityLabel">Add Activity</h5>
           <button type="button" class="btn" data-bs-dismiss="modal"><i class="fas fa-x"></i></button>
         </div>
         <div class="modal-body">
@@ -229,6 +243,103 @@
   </div>
 </div>
 {{-- End Insert Modal  --}}
+
+{{-- Start Update Modal --}}
+<div class="modal fade" id="updateActivity" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="updateActivityLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title mx-auto  " id="updateActivityLabel">Update Activity</h5>
+          <button type="button" class="btn" data-bs-dismiss="modal"><i class="fas fa-x"></i></button>
+        </div>
+        <div class="modal-body">
+            <form action="" method="POST">
+                @csrf
+                <input type="hidden" name="newactivity_id" id="newactivity_id" value="">
+                <div class="card-body p-0">
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="officer_first_name">Officer Name<span class="text-danger">*</span></label>
+                                <select class="chosen form-select" searchable="Search here.." name="newofficer_id" id="newofficer_name"> 
+                                    <option value="" disabled  >Select Officer</option>
+                                    @foreach ( $value['b'] as $res)
+                                        @if ($res->officer_status == 'inactive')
+                                        {
+                                        }@else
+                                        {       
+                                            <option value="{{$res->id}}">{{$res->officer_first_name}} {{$res->officer_last_name}}</option>
+                                        }
+                                        @endif
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="officer_first_name">Visitor Name<span class="text-danger">*</span></label>
+                                <select class=" chosen form-select" searchable="Search here.." name="newvisitor_id" id="newvisitor_name">
+                                    <option value="" disabled >Select Visitor</option>
+                                    @foreach ( $value['c'] as $res)
+                                    @if ($res->visitor_status == 'inactive')
+                                        {
+                                        }@else
+                                        { 
+                                            <option value="{{$res->id}}">{{$res->visitor_first_name}} {{$res->visitor_last_name}}</option>
+                                        }
+                                        @endif
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="officer_first_name">Name<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control col" placeholder="Name" required="" id="newname" name="newname" maxlength="30" autocomplete="off" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="officer_last_name">Date<span class="text-danger">*</span></label>
+                                <input type="date" class="form-control col"  required="" id="newdate" name="newdate"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="work_start_time">Start Time:<span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                      <input type="text" placeholder="Start Time" name="newstart_time" id="newstart_time" class="form-control datetimepicker-input" data-toggle="datetimepicker"  required onkeydown="return false" onpaste="return false;" ondrop="return false;" autocomplete="off" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="work_end_time">End Time:<span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                      <input type="text" placeholder="End Time" name="newend_time" id="newend_time" class="form-control datetimepicker-input" data-toggle="datetimepicker" required onkeydown="return false" onpaste="return false;" ondrop="return false;" autocomplete="off" />
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
+                    <div class="row my-2">
+                        <div class="col mb-3 text-center">
+                            <button class="btn btn-info" id="newupdate" type="submit">Update</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+  </div>
+</div>
+
+{{-- End Update Modal --}}
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.0/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/js/tempusdominus-bootstrap-4.min.js"></script>

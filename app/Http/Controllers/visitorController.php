@@ -81,8 +81,10 @@ class visitorController extends Controller
     if($status == 'active')
     {
         $obj->visitor_status = 'inactive';
+        DB::table('activities')->where('visitor_id',$id)->update(array('status'=> 'inactive'));
     }else{
         $obj->visitor_status = 'active';
+        DB::table('activities')->where('visitor_id',$id)->update(array('status'=> 'active'));
     }
     
     $obj->update();

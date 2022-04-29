@@ -12,9 +12,9 @@ class activityController extends Controller
 {
     function getActivitiesDetails()
     {
-        $activity['a'] = Activity::join('officers','activities.officer_id','=','officers.id')
-        ->join('visitors','activities.visitor_id','=','visitors.id')
-        ->get();
+        $activity['a'] = Activity::leftjoin('officers','activities.officer_id','=','officers.id')
+        ->leftjoin('visitors','activities.visitor_id','=','visitors.id')
+        ->get()->all(); 
 
         $activity['b'] = DB::table('officers')->get()->all();
 
@@ -51,11 +51,10 @@ class activityController extends Controller
                 'start_time' => 'required',
                 'end_time' => 'required',
             ]);
-
-            return "Appointment haina";
         } 
 
-        
+        if(count($data) > 0)
+        {
 
             $days = DB::table('work_days')
                     ->where('officer_id','=',$request->officer_id)
@@ -166,6 +165,69 @@ class activityController extends Controller
             {
                 return redirect()->back()->with('error',' Officer is not availabe.');
             }
-       
+        }else
+        {
+            $obj->officer_id = $request->officer_id;
+            $obj->visitor_id = $request->visitor_id;
+            $obj->name = $request->name;
+            $obj->type = $request->type;
+            $obj->status = $request->status;
+            $obj->date = $request->date;
+            $obj->start_time = $request->start_time;
+            $obj->end_time = $request->end_time;
+            $obj->added_on = date("Y-m-d h:i:s",time());
+
+            $obj->save();
+
+            return redirect()->back()->with('success','You have successfully Inserted an Activity');
+        }
+    }
+
+    function getActivityDetail($id)
+    {
+        // $activity = Activity::find($id);
+        $activity = DB::table('activities')->where('activity_id',$id)->get()->all();
+        foreach ($activity as $column => $value)
+            {
+                $officerid = $value->officer_id ;
+                $visitorid = $value->visitor_id;
+            }
+        $officername = DB::table('officers')->select('officer_first_name','officer_last_name')->where('id',$officerid)->get();
+        $visitorname = DB::table('visitors')->select('visitor_first_name','visitor_last_name')->where('id',$visitorid)->get();
+
+        return response()->json([
+            'status' => 200,
+            'activity' => $activity,
+            'officername' => $officername,
+            'visitorname' => $visitorname,
+        ]);
+    }
+
+    function updateActivityStatus(Request $req)
+    {
+        if($req->status_value == 'active')
+        {
+            DB::table('activities')->where('activity_id',$req->activity_id)->update(array('status'=> 'inactive'));
+        }else
+        {
+            $statusOfficer = DB::table('officers')->select('officer_status')->where('id',$req->officer_id)->get();
+            $statusVisitor = DB::table('visitors')->select('visitor_status')->where('id',$req->visitor_id)->get();
+            if($statusOfficer == 'active' && $statusVisitor == 'active')
+            {
+                DB::table('activities')->where('activity_id',$req->activity_id)->update(array('status'=> 'active'));
+            }else{
+                return redirect()->back()->with('error','Officer Or Visitor Deactivated');
+
+            }
+        }
+        
+        
+        return redirect()->back()->with('success','Status changed Successfully');
+    }
+
+    function cancelActivity(Request $req)
+    {
+        DB::table('activities')->where('activity_id',$req->activity_id)->update(array('status'=> 'cancelled'));
+        return redirect()->back()->with('success','Activity Cancelled Successfully');
     }
 }

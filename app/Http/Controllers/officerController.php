@@ -102,24 +102,21 @@ class officerController extends Controller
         if($status == 'active')
         {
             $obj->officer_status = 'inactive';
+            DB::table('activities')->where('officer_id',$id)->update(array('status'=> 'inactive'));
         }else{
             $obj->officer_status = 'active';
+            DB::table('activities')->where('officer_id',$id)->update(array('status'=> 'active'));
         }
         
         $obj->update();
+
+        
         
         return redirect()->back()->with('success','Status changed Successfully');
    }
 
    function getAppointments($id)
    {
-    //    $data = DB ::table('activities')->where('officer_id','=',$id)->where('type','=','Appointment')->get();
-    //    foreach($data as $val)
-    //    {
-    //        $officer_name[] = DB::table('officers')->select('officer_first_name','officer_last_name')->where('id','=',$val->officer_id)->get();
-    //        $visitor_name[] = DB::table('visitors')->select('visitor_first_name','visitor_last_name')->where('id','=',$val->visitor_id)->get()->all();
-    //    }
-
         $data = DB::table('activities')
         ->join('officers','activities.officer_id','=','officers.id')
         ->join('visitors','activities.visitor_id','=','visitors.id')

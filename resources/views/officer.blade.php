@@ -191,7 +191,7 @@
                     
                     <div class="row my-2">
                         <div class="col mb-3 text-center">
-                            <button class="btn btn-info" id="register" type="submit" disabled="disabled">Insert</button>
+                            <button class="btn btn-info" id="register" type="submit" disabled="disabled">Add</button>
                         </div>
                     </div>
                 </div>

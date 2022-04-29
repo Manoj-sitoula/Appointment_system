@@ -40,3 +40,6 @@ Route::put('/updateVisitorStatus',[visitorController::class,'updateVisitorStatus
 // for Activity
 Route::get('/activity',[\App\Http\Controllers\activityController::class,'getActivitiesDetails'])->name('activity');
 Route::post('/insertActivity',[activityController::class,'insertActivity'])->name('insertActivity');
+Route::put('/updateActivityStatus',[activityController::class,'updateActivityStatus'])->name('updateActivityStatus');
+Route::put('/cancelActivity',[activityController::class,'cancelActivity'])->name('cancelActivity');
+Route::get('/getActivityDetail/{id}',[activityController::class,'getActivityDetail'])->name('getActivityDetail');

@@ -135,7 +135,7 @@
                       
                       <div class="row my-2 mt-2">
                           <div class="col mb-3 text-center">
-                              <button class="btn btn-info" id="register" type="submit" >Insert</button>
+                              <button class="btn btn-info" id="register" type="submit" >Add</button>
                           </div>
                       </div>
                   </div>

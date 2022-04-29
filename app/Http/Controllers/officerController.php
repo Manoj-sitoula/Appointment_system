@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Officer;
 use App\Models\WorkDays;
+use Illuminate\Support\Facades\DB;
 
 class officerController extends Controller
 {
 
     function getOfficersDetails()
    {
-      $data = Officer::paginate(10);
+      $data = Officer::get();
       return view('officer',['value'=>$data]); 
    }
 
@@ -25,7 +26,7 @@ class officerController extends Controller
             'work_start_time' => 'required',
             'work_end_time' => 'required',
         ]);
-        $id = $user_id = rand(time(), 10000);
+        $id = rand(time(), 10000);
         
         $obj = new Officer();
         $obj->id = $id;
@@ -108,5 +109,26 @@ class officerController extends Controller
         $obj->update();
         
         return redirect()->back()->with('success','Status changed Successfully');
+   }
+
+   function getAppointments($id)
+   {
+    //    $data = DB ::table('activities')->where('officer_id','=',$id)->where('type','=','Appointment')->get();
+    //    foreach($data as $val)
+    //    {
+    //        $officer_name[] = DB::table('officers')->select('officer_first_name','officer_last_name')->where('id','=',$val->officer_id)->get();
+    //        $visitor_name[] = DB::table('visitors')->select('visitor_first_name','visitor_last_name')->where('id','=',$val->visitor_id)->get()->all();
+    //    }
+
+        $data = DB::table('activities')
+        ->join('officers','activities.officer_id','=','officers.id')
+        ->join('visitors','activities.visitor_id','=','visitors.id')
+        ->where('officer_id','=',$id)
+        ->where('type','=','Appointment')
+        ->get();
+
+       return response()->json([
+        'data'=>$data,
+    ]);
    }
 }

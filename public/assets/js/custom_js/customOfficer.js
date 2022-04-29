@@ -68,10 +68,42 @@
                 url:"getOfficerDetail/"+user_id,
                 success:function(response){
 
-                    // if(response.workdays[0].day_of_week == 'sunday')
-                    // {
-                    //     $('#newsunday').prop("checked", true);;
-                    // }
+                    $('input[type=checkbox]').each(function() 
+                    { 
+                        $(this).prop('checked', false); 
+                    });
+
+                    data = response.workdays;
+                    $.each(data,function(index,item){
+                        if(item.day_of_week == 'sunday')
+                        {
+                            $('#newsunday').prop("checked", true);
+                        } 
+                        if(item.day_of_week == 'monday')
+                        {
+                            $('#newmonday').prop("checked", true);
+                        }
+                        if(item.day_of_week == 'tuesday')
+                        {
+                            $('#newtuesday').prop("checked", true);
+                        }
+                        if(item.day_of_week == 'wednesday')
+                        {
+                            $('#newwednesday').prop("checked", true);
+                        }
+                        if(item.day_of_week == 'thursday')
+                        {
+                            $('#newthursday').prop("checked", true);
+                        }
+                        if(item.day_of_week == 'friday')
+                        {
+                            $('#newfriday').prop("checked", true);
+                        }
+                        if(item.day_of_week == 'saturday')
+                        {
+                            $('#newsaturday').prop("checked", true);
+                        }
+                    });
 
                     $('#officer_id').val(response.officer.id);
                     $('#new_officer_first_name').val(response.officer.officer_first_name);
@@ -79,10 +111,45 @@
                     $('#new_post').val(response.officer.officer_post);
                     $('#new_work_start_time').val(response.officer.work_start_time);
                     $('#new_work_end_time').val(response.officer.work_end_time);
-
                 }
-
             });
         });
     });
     
+
+    $(document).ready( function () {
+        $('#myTable').DataTable();
+    } );
+    
+
+    $(document).ready(function(){
+        $(document).on('click','#appointments',function(){
+            var user_id = $(this).val();
+            $('#appointment').modal('show');
+            var i = 1;
+            data = " ";
+            $.ajax({
+                type:"GET",
+                url:"getAppointments/"+user_id,
+                success:function(response){
+                    $.each(response,function(index,item){
+                        $.each(item,function(key, value){ 
+                            if(value.status == 'active')
+                            {
+                                data =data + "<tr><td>"+i+"</td><td>"+value.visitor_first_name +" "+ value.visitor_last_name+"</td><td>"+value.date+"</td><td>"+value.start_time+"</td><td>"+value.end_time+"</td><td><a class='btn btn-sm btn-success'>Active</a></td></tr>";
+                            }else if(value.status == 'inactive')
+                            {
+                                data =data + "<tr><td>"+i+"</td><td>"+value.visitor_first_name +" "+ value.visitor_last_name+"</td><td>"+value.date+"</td><td>"+value.start_time+"</td><td>"+value.end_time+"</td><td><a class='btn btn-sm btn-danger'>InActive</a></td></tr>";
+                            }else
+                            {
+                                data =data + "<tr><td>"+i+"</td><td>"+value.visitor_first_name +" "+ value.visitor_last_name+"</td><td>"+value.date+"</td><td>"+value.start_time+"</td><td>"+value.end_time+"</td><td><a class='btn btn-sm btn-warning'>Cancalled</a></td></tr>";
+                            }
+                            i++;
+                        });
+                    });
+                    $('#tblappointment').html(data);
+                }
+            });
+        });
+    });
+

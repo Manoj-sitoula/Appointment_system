@@ -6,6 +6,8 @@ use App\Models\Activity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+
+date_default_timezone_set("Asia/Katmandu");
 class activityController extends Controller
 {
     function getActivitiesDetails()
@@ -24,6 +26,16 @@ class activityController extends Controller
 
     function insertActivity(Request $request)
     {
-        return $request;
+        $request->validate([
+            'officer_id' => 'bail|required', 
+            'name' => 'required',
+            'date' => 'required',
+            'start_time' => 'required',
+            'end_time' => 'required',
+        ]);
+
+        $data = Activity::get();
+
+
     }
 }

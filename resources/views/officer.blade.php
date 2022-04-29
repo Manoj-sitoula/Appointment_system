@@ -11,18 +11,11 @@
             {{ $message }}
         </div>
 @endif
- 
-<table class="table">
+<button type="button" class="btn btn-info float-end" data-bs-toggle="modal" data-bs-target="#addOfficer">
+    <i class="fas fa-plus"></i>
+  </button>
+<table class="table" id="myTable">
     <thead>
-        <tr>
-            <th colspan="6">
-            </th>
-            <th colspan="1">
-                <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#addOfficer">
-                  Add New
-                </button>
-            </th>
-        </tr>
         <tr>
           <th scope="col">Officer Id</th>
           <th scope="col">Name</th>
@@ -45,9 +38,9 @@
                     <form action="{{route('updateOfficerStatus')}}" method="POST">
                         @csrf
                         @method('put')
-                        <input type="hidden" name="user_id" id="user_id" value="{{$data->id}}">
+                        <input type="hidden" name="user_id" value="{{$data->id}}">
                         <input type="hidden" name="status_value" id="status_value" value="{{$data->officer_status}}">
-                        <button class="btn btn-sm btn-success">Active</button>
+                        <input type="submit" class="btn btn-sm btn-success" value="Active">
                     </td>
                     </form>
                     
@@ -56,9 +49,9 @@
                     <form action="{{route('updateOfficerStatus')}}" method="POST">
                         @csrf
                         @method('put')
-                        <input type="hidden" name="user_id" id="user_id" value="{{$data->id}}">
+                        <input type="hidden" name="user_id" value="{{$data->id}}">
                         <input type="hidden" name="status_value" id="status_value" value="{{$data->officer_status}}">
-                    <button class="btn btn-sm btn-danger">InActive</button>
+                        <input type="submit" class="btn btn-sm btn-danger" value="InActive">
                     </form>
                     
                 </td>
@@ -71,7 +64,7 @@
                         <button type="button" class="btn btn-info" id="updatebtn" data-bs-toggle="modal" data-bs-target="#updateOfficer" value="{{$data->id}}">Update</button>
                     </div>
                     <div class="col-lg-6 col-xl-6 col-md-12 col-sm-12">
-                        <button class="btn btn-info">Appointment</button>
+                        <button class="btn btn-info" id="appointments" value="{{$data->id}}">Appointment</button>
                     </div>
                 </div>
             </td>
@@ -320,6 +313,37 @@
   </div>
 
 {{-- End Update Modal --}}
+
+{{-- AppointmentModal --}}
+<div class="modal fade" id="appointment" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="appointmentLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title mx-auto  " id="appointmeentLabel">Appointments </h5>
+          <button type="button" class="btn" data-bs-dismiss="modal"><i class="fas fa-x"></i></button>
+        </div>
+        <div class="modal-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>SN</th>
+                        <th>Visitor Name</th>
+                        <th>Date</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="tblappointment">
+
+                </tbody>
+                
+            </table>
+        </div>
+      </div>
+    </div>
+</div>
+{{-- End Appointment Modal --}}
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.0/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/js/tempusdominus-bootstrap-4.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/css/tempusdominus-bootstrap-4.min.css"/>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Visitor;
 use Illuminate\Http\Request;
+use Illuminate\support\Facades\DB;
 
 class visitorController extends Controller
 {
@@ -86,5 +87,19 @@ class visitorController extends Controller
     $obj->update();
     
     return redirect()->back()->with('success','Status changed Successfully');
+   }
+
+   function getVisitorAppointments($id)
+   {
+        $data = DB::table('activities')
+        ->join('officers','activities.officer_id','=','officers.id')
+        ->join('visitors','activities.visitor_id','=','visitors.id')
+        ->where('visitor_id','=',$id)
+        ->where('type','=','Appointment')
+        ->get();
+
+       return response()->json([
+        'data'=>$data,
+    ]);
    }
 }

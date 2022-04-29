@@ -10,11 +10,14 @@
     <link rel="stylesheet" href="{{asset('assets/css/bootstrap.min.css')}}" >
     <link rel="stylesheet" href="{{asset('assets/css/jquery-ui.css')}}" >
     <link rel="stylesheet" href="{{asset('assets/css/chosen.min.css')}}" >
+    <link rel="stylesheet" href="{{asset('assets/css/datatables.min.css')}}"/>
+
 
     <script src="{{asset('assets/js/bootstrap.bundle.min.js')}}"></script>
     <script src="{{asset('assets/js/jquery.min.js')}}" ></script>
     <script src="{{asset('assets/js/jquery-ui.min.js')}}" ></script>
     <script src="{{asset('assets/js/chosen.jquery.min.js')}}" ></script>
+    <script src="{{asset('assets/js/datatables.min.js')}}"></script>
 
 	<title>Office Appointment System</title>
     <style type="text/css">

@@ -25,6 +25,7 @@ Route::get('/', function () {
 Route::get('/officer',[officerController::class,'getOfficersDetails'])->name('officer');
 Route::post('/insertOfficer',[officerController::class,'insertOfficer'])->name('insertOfficer');
 Route::get('/getOfficerDetail/{id}',[officerController::class,'getOfficerDetail'])->name('getOfficerDetail');
+Route::get('/getAppointments/{id}',[officerController::class,'getAppointments'])->name('getAppointments');
 Route::put('/updateOfficer',[officerController::class,'updateOfficer'])->name('updateOfficer');
 Route::put('/updateOfficerStatus',[officerController::class,'updateOfficerStatus'])->name('updateOfficerStatus');
 
@@ -32,6 +33,7 @@ Route::put('/updateOfficerStatus',[officerController::class,'updateOfficerStatus
 Route::get('/visitor',[visitorController::class,'getVisitorsDetails'])->name('visitor');
 Route::post('/insertVisitor',[visitorController::class,'insertVisitor'])->name('insertVisitor');
 Route::get('/getVisitorDetail/{id}',[visitorController::class,'getVisitorDetail'])->name('getVisitorDetail');
+Route::get('/getVisitorAppointments/{id}',[visitorController::class,'getVisitorAppointments'])->name('getVisitorAppointments');
 Route::put('/updateVisitor',[visitorController::class,'updateVisitor'])->name('updateVisitor');
 Route::put('/updateVisitorStatus',[visitorController::class,'updateVisitorStatus'])->name('updateVisitorStatus');
 

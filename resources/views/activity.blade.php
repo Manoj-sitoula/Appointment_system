@@ -12,6 +12,13 @@
             {{ $message }}
         </div>
 @endif
+
+@if(session()->has('error'))
+    <div class="alert alert-danger">
+        {{ session()->get('error') }}
+    </div>
+@endif
+
 <table class="table">
     <thead>
         <tr>
@@ -19,7 +26,7 @@
             </th>
             <th colspan="1">
                 <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#addActivity">
-                  Add New
+                  <i class="fas fa-plus"></i>
                 </button>
             </th>
         </tr>
@@ -44,15 +51,15 @@
             <td>{{$data->officer_first_name}} {{$data->officer_last_name}}</td>
             <td>{{$data->visitor_first_name}} {{$data->visitor_last_name}}</td>
             <td>{{$data->name}}</td>
-            @if ($data->type == 'appointment')
+            @if ($data->type == 'Appointment')
                 <td>
                     <button class="btn btn-primary btn-sm">Appointment</button>
                 </td>
-            @elseif ($data->type == 'leave')
+            @elseif ($data->type == 'Leave')
                 <td>
                     <button class="btn btn-danger btn-sm">Leave</button>
                 </td>
-            @elseif($data->type == 'break')
+            @elseif($data->type == 'Break')
                 <td>
                     <button class="btn btn-warning btn-sm">Break</button>
                 </td>
@@ -116,7 +123,7 @@
                         <div class="col">
                             <div class="form-group">
                                 <label for="officer_first_name">Officer Name<span class="text-danger">*</span></label>
-                                <select class="chosen form-group" searchable="Search here.." name="officer_id">
+                                <select class="chosen form-select" searchable="Search here.." name="officer_id">
                                     <option value="" disabled selected>Select Officer</option>
                                     @foreach ( $value['b'] as $res)
                                         @if ($res->officer_status == 'inactive')
@@ -133,7 +140,7 @@
                         <div class="col">
                             <div class="form-group">
                                 <label for="officer_first_name">Visitor Name<span class="text-danger">*</span></label>
-                                <select class=" chosen form-group" searchable="Search here.." name="visitor_id">
+                                <select class=" chosen form-select" searchable="Search here.." name="visitor_id">
                                     <option value="" disabled selected>Select Visitor</option>
                                     @foreach ( $value['c'] as $res)
                                     @if ($res->status == 'inactive')
@@ -157,8 +164,8 @@
                         </div>
                         <div class="col">
                             <div class="form-group">
-                                <label for="post">Type:<span class="text-danger">*</span></label>
-                                <select class="form-control" name="post" id="post">
+                                <label for="type">Type:<span class="text-danger">*</span></label>
+                                <select class="form-control" name="type" id="type">
                                   <option>Appointment</option>
                                   <option>Leave</option>
                                   <option>Break</option>

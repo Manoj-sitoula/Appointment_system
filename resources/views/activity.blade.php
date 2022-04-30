@@ -22,12 +22,67 @@
 <table class="table">
     <thead>
         <tr>
-            <th colspan="9">
+            <th colspan="8">
+                    <div class="row">
+                        <div class="col-12">
+                            <form action="">
+                                <input class="form-control" type="text" name="search" id="search" autocomplete="off" placeholder="Search">
+                            </form>
+                            <div  id="searchdate" style="display: none;">
+                                <form action="">
+                                    <div class="row">
+                                        <div class="col-5 form-group">
+                                            <label for="first_date">First Date</label>
+                                            <input class="form-control " type="date" name="first_date" id="first_date" value="2020-01-01" autocomplete="off">
+                                        </div>
+                                        <div class="col-5 form-group">
+                                            <label for="last_date">Last Date</label>
+                                            <input class="form-control " type="date" name="last_date" id="last_date" value="2020-01-01" autocomplete="off">
+                                        </div>
+                                        <div class="col-2 m-auto">
+                                            <button type="button" class="btn btn-info" id="searchbtn" value="officer">Search</button>
+                                        </div>
+                                    </div>
+                                </form> 
+                            </div>
+                            <div id="time" style="display: none;">
+                                <form action="">
+                                    <div class="row" >
+                                        <div class="col-5 form-group">
+                                            <label for="work_start_time">Start Time:<span class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <input type="text" placeholder="Start Time" name="first_time" id="first_time" class="form-control datetimepicker-input" data-toggle="datetimepicker"  required onkeydown="return false" onpaste="return false;" ondrop="return false;" autocomplete="off" />
+                                            </div>
+                                        </div>
+                                        <div class="col-5 form-group">
+                                            <label for="work_end_time">End Time:<span class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <input type="text" placeholder="End Time" name="second_time" id="second_time" class="form-control datetimepicker-input" data-toggle="datetimepicker" required onkeydown="return false" onpaste="return false;" ondrop="return false;" autocomplete="off" />
+                                            </div>
+                                        </div>
+                                        <div class="col-2 m-auto">
+                                            <button type="button" class="btn btn-info" id="searchbtn" value="officer">Search</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
             </th>
             <th colspan="1">
                 <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#addActivity">
                   <i class="fas fa-plus"></i>
                 </button>
+            </th>
+            <th colspan="1">
+                  <select class="form-control" name="filter" id="filter">
+                    <option value="officer" selected>Officer</option>
+                    <option value="visitor">Visitor</option>
+                    <option value="type">Type</option>
+                    <option value="status">Status</option>
+                    <option value="date">Date</option>
+                    <option value="time">Time</option>
+                  </select>
             </th>
         </tr>
         <tr>
@@ -343,8 +398,8 @@
 
 {{-- End Update Modal --}}
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.0/moment.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/js/tempusdominus-bootstrap-4.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/css/tempusdominus-bootstrap-4.min.css"/>
+<link rel="stylesheet" href="{{asset('assets/css/tempusdominus-bootstrap-4.min.css')}}">
+<script src="{{asset('assets/js/moment.min.js')}}"></script>
+<script src="{{asset('assets/js/tempusdominus-bootstrap-4.min.js')}}" ></script>
 <script src="{{asset('assets/js/custom_js/customActivities.js')}}"></script>
 @endsection

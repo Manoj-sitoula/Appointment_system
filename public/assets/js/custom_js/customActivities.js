@@ -23,6 +23,15 @@ $('#newend_time').datetimepicker({
     format: 'HH:mm'
 });
 
+$('#first_time').datetimepicker({
+    format: 'HH:mm'
+});
+
+$('#second_time').datetimepicker({
+    useCurrent: false,
+    format: 'HH:mm'
+});
+
 $(document).ready(function(){
     $(document).on('click','#updatebutton',function(){
         var user_id = $(this).val();
@@ -30,7 +39,6 @@ $(document).ready(function(){
             type:"GET",
             url:"getActivityDetail/"+user_id,
             success:function(response){
-                console.log(response);
                 dataActivity = response.activity;
                 $.each(dataActivity,function(index,item){
                     $('#newactivity_id').val(item.activity_id);
@@ -50,7 +58,6 @@ $(document).ready(function(){
                         if ($(this).text() == officer_name)
                           $(this).attr("selected","selected");
                       });
-                    console.log(officer_name );
 
                 });
 
@@ -61,7 +68,6 @@ $(document).ready(function(){
                         if ($(this).text() == visitor_name)
                           $(this).attr("selected","selected");
                       });
-                    console.log(visitor_name );
                 });
 
                 
@@ -71,3 +77,37 @@ $(document).ready(function(){
         });
     });
 });
+
+
+
+$("#filter").change(function() {
+    var data = ($(this).find("option:selected").val());
+    console.log(data);
+    $('#searchbtn').val(data);
+    if(data == 'officer' || data == 'visitor' || data== 'type' || data == 'status')
+    {
+        
+        $('#search').css("display","block");
+        $('#searchdate').css("display","none");
+        $('#time').css("display","none");
+    }
+    else if(data == 'date')
+    {
+        $("#search").removeAttr("style");
+        $("#searchdate").removeAttr("style");
+        $("#time").removeAttr("style");
+        $('#search').css("display","none");
+        $('#searchdate').css("display","block");
+        $('#time').css("display","none");
+    }
+    else if(data == 'time')
+    {
+        $("#search").removeAttr("style");
+        $("#searchdate").removeAttr("style");
+        $("#time").removeAttr("style");
+        $('#search').css("display","none");
+        $('#searchdate').css("display","none");
+        $('#time').css("display","block");
+    }
+});
+        

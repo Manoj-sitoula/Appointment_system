@@ -14,6 +14,7 @@ class activityController extends Controller
     {
         $activity['a'] = Activity::leftjoin('officers','activities.officer_id','=','officers.id')
         ->leftjoin('visitors','activities.visitor_id','=','visitors.id')
+        ->orderBy('date', 'DESC')
         ->get()->all(); 
 
         $activity['b'] = DB::table('officers')->get()->all();

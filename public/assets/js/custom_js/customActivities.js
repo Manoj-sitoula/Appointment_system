@@ -14,6 +14,15 @@ $('#end_time').datetimepicker({
     format: 'HH:mm'
 });
 
+$('#newstart_time').datetimepicker({
+    format: 'HH:mm'
+});
+
+$('#newend_time').datetimepicker({
+    useCurrent: false,
+    format: 'HH:mm'
+});
+
 $(document).ready(function(){
     $(document).on('click','#updatebutton',function(){
         var user_id = $(this).val();
@@ -36,6 +45,11 @@ $(document).ready(function(){
                 dataOfficer = response.officername;
                 $.each(dataOfficer,function(index,item){
                     var officer_name = item.officer_first_name+" "+item.officer_last_name ;
+
+                    $("select option").each(function(){
+                        if ($(this).text() == officer_name)
+                          $(this).attr("selected","selected");
+                      });
                     console.log(officer_name );
 
                 });
@@ -43,6 +57,10 @@ $(document).ready(function(){
                 dataVisitor = response.visitorname;
                 $.each(dataVisitor,function(index,item){
                     var visitor_name = item.visitor_first_name+" "+item.visitor_last_name ;
+                    $("select option").each(function(){
+                        if ($(this).text() == visitor_name)
+                          $(this).attr("selected","selected");
+                      });
                     console.log(visitor_name );
                 });
 

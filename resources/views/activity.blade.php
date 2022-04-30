@@ -253,16 +253,18 @@
           <button type="button" class="btn" data-bs-dismiss="modal"><i class="fas fa-x"></i></button>
         </div>
         <div class="modal-body">
-            <form action="" method="POST">
+            <form action="{{route('updateActivity')}}" method="POST">
                 @csrf
+                @method('put')
+
                 <input type="hidden" name="newactivity_id" id="newactivity_id" value="">
                 <div class="card-body p-0">
                     <div class="row">
                         <div class="col">
                             <div class="form-group">
                                 <label for="officer_first_name">Officer Name<span class="text-danger">*</span></label>
-                                <select class="chosen form-select" searchable="Search here.." name="newofficer_id" id="newofficer_name"> 
-                                    <option value="" disabled  >Select Officer</option>
+                                <select class=" form-select" searchable="Search here.." name="newofficer_id" id="newofficer_name"> 
+                                    <option value="" disabled  selected>Select Officer</option>
                                     @foreach ( $value['b'] as $res)
                                         @if ($res->officer_status == 'inactive')
                                         {
@@ -278,8 +280,8 @@
                         <div class="col">
                             <div class="form-group">
                                 <label for="officer_first_name">Visitor Name<span class="text-danger">*</span></label>
-                                <select class=" chosen form-select" searchable="Search here.." name="newvisitor_id" id="newvisitor_name">
-                                    <option value="" disabled >Select Visitor</option>
+                                <select class="  form-select" searchable="Search here.." name="newvisitor_id" id="newvisitor_name">
+                                    <option value="" disabled selected>Select Visitor</option>
                                     @foreach ( $value['c'] as $res)
                                     @if ($res->visitor_status == 'inactive')
                                         {

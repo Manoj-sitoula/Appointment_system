@@ -183,6 +183,8 @@ class activityController extends Controller
         }
     }
 
+
+    
     function getActivityDetail($id)
     {
         // $activity = Activity::find($id);
@@ -203,6 +205,125 @@ class activityController extends Controller
         ]);
     }
 
+
+    function updateActivity(Request $request)
+    {
+        $data = DB::table('activities')->where('activity_id','!=',$request->newactivity_id)->get()->all();
+        
+        //$obj = Activity::findOrFail($request->newactivity_id);
+        $obj = DB::table('activities')->where('activity_id',$request->newactivity_id)->get();
+
+
+        $days = DB::table('work_days')
+        ->where('officer_id','=',$request->newofficer_id)
+        ->get()
+        ->all();
+
+        $requestedDay = strtolower(date("l", strtotime($request->newdate)));
+
+        $isInWorkDay = false;
+
+        foreach ($days as $column => $value)
+        {
+            if($requestedDay == $value->day_of_week){
+            $isInWorkDay = true;
+            break;
+            }
+        }
+
+        $officeTime = DB::table('officers')
+                    ->where('id','=',$request->newofficer_id)
+                    ->get()
+                    ->all();
+
+        foreach ($officeTime as $column => $value)
+        {
+            $officerWorkStartTime = $value->work_start_time ;
+            $officerWorkEndTime = $value->work_end_time;
+        }
+
+
+        foreach ($data as $column => $value)
+        {
+            $officerid = $value->officer_id;
+            $visitorid = $value->visitor_id;
+            $date = $value->date;
+            $starttime = $value->start_time;
+            $endtime = $value->end_time;
+        }
+
+        if($isInWorkDay)
+        {
+            if($request->newstart_time >= $officerWorkStartTime && $request-> newend_time <= $officerWorkEndTime)
+            {
+                
+                if($request->newdate == $date)
+                {
+                    if($request->newvisitor_id == $visitorid || $request->newofficer_id == $officerid)
+                    {
+                        if(((strtotime("$request->newstart_time") < strtotime("$starttime") && strtotime("$request->newend_time") < strtotime("$starttime")) || (strtotime("$request->newstart_time") > strtotime("$endtime") && strtotime("$request->newend_time") > strtotime("$endtime"))) && (strtotime("$request->newstart_time") < strtotime("$request->newend_time")))
+                        {
+                            $updatedData = array(
+                                "officer_id" => $request->newofficer_id,
+                                "visitor_id" => $request->newvisitor_id,
+                                "name" => $request->newname,
+                                "date" => $request->newdate,
+                                "start_time" => $request->newstart_time,
+                                "end_time" => $request->newend_time,
+                                "added_on" => date("Y-m-d h:i:s",time()),
+                            );
+                            
+                            DB::table('activities')->where('activity_id',$request->newactivity_id)->update($updatedData);
+
+                            return redirect()->back()->with('success','You have successfully Updated an Activity');
+                        }else{
+                            return redirect()->back()->with('error','Officer or Visitor already has Appointment or Officer is on Break or Leave.');
+                        }
+
+                    }else
+                    {
+                        $updatedData = array(
+                            "officer_id" => $request->newofficer_id,
+                            "visitor_id" => $request->newvisitor_id,
+                            "name" => $request->newname,
+                            "date" => $request->newdate,
+                            "start_time" => $request->newstart_time,
+                            "end_time" => $request->newend_time,
+                            "added_on" => date("Y-m-d h:i:s",time()),
+                        );
+                        
+                            DB::table('activities')->where('activity_id',$request->newactivity_id)->update($updatedData);
+
+                            return redirect()->back()->with('success','You have successfully Inserted an Activity');
+                    }
+                }else
+                {
+                    $updatedData = array(
+                        "officer_id" => $request->newofficer_id,
+                        "visitor_id" => $request->newvisitor_id,
+                        "name" => $request->newname,
+                        "date" => $request->newdate,
+                        "start_time" => $request->newstart_time,
+                        "end_time" => $request->newend_time,
+                        "added_on" => date("Y-m-d h:i:s",time()),
+                    );
+                    
+                    DB::table('activities')->where('activity_id',$request->newactivity_id)->update($updatedData);
+
+
+                    return redirect()->back()->with('success','You have successfully Inserted an Activity');
+                }
+
+            }else
+            {
+                return redirect()->back()->with('error',' Officer has no working hour in given time.');
+            }
+        }else
+        {
+            return redirect()->back()->with('error',' Officer is not availabe.');
+        }
+    }
+
     function updateActivityStatus(Request $req)
     {
         if($req->status_value == 'active')
@@ -210,9 +331,29 @@ class activityController extends Controller
             DB::table('activities')->where('activity_id',$req->activity_id)->update(array('status'=> 'inactive'));
         }else
         {
-            $statusOfficer = DB::table('officers')->select('officer_status')->where('id',$req->officer_id)->get();
-            $statusVisitor = DB::table('visitors')->select('visitor_status')->where('id',$req->visitor_id)->get();
-            if($statusOfficer == 'active' && $statusVisitor == 'active')
+            $statusOfficer = (object)DB::table('officers')->select('officer_status')->where('id',$req->officer_id)->get();
+            $statusVisitor = (object)DB::table('visitors')->select('visitor_status')->where('id',$req->visitor_id)->get();
+
+            foreach($statusOfficer as $stat){
+                if($stat->officer_status == 'active'){
+                    $officerStatus = 'active';
+                }
+                else{
+                    $officerStatus = 'inactive';
+                }
+            }
+
+            $visitorStatus = "empty";
+            foreach($statusVisitor as $stat){
+                if($stat->visitor_status == 'active'){
+                    $visitorStatus = 'active';
+                }
+                else{
+                    $visitorStatus = 'inactive';
+                }
+            }
+
+            if($officerStatus == 'active' && $visitorStatus == 'active' || $officerStatus == 'active' && $visitorStatus == "empty" )
             {
                 DB::table('activities')->where('activity_id',$req->activity_id)->update(array('status'=> 'active'));
             }else{

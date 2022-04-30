@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('officer_post');
             $table->string('officer_status');
             $table->time('work_start_time');
-            $table->time('work_end _time');
+            $table->time('work_end_time');
             $table->rememberToken();
             $table->timestamps();
         });

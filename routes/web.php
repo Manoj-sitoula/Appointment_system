@@ -44,4 +44,5 @@ Route::put('/updateActivity',[activityController::class,'updateActivity'])->name
 Route::put('/updateActivityStatus',[activityController::class,'updateActivityStatus'])->name('updateActivityStatus');
 Route::put('/cancelActivity',[activityController::class,'cancelActivity'])->name('cancelActivity');
 Route::get('/getActivityDetail/{id}',[activityController::class,'getActivityDetail'])->name('getActivityDetail');
+Route::get('/searchResult',[activityController::class,'searchResult'])->name('searchResult');
 

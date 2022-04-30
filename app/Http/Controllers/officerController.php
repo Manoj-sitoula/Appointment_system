@@ -26,8 +26,12 @@ class officerController extends Controller
             'work_start_time' => 'required',
             'work_end_time' => 'required',
         ]);
-        $id = rand(time(), 10000);
+
+        // DB::transaction(function(){
+            
+        // });
         
+        $id = rand(time(), 10000); 
         $obj = new Officer();
         $obj->id = $id;
         $obj->officer_first_name = $request->officer_first_name;

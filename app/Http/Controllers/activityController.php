@@ -85,7 +85,6 @@ class activityController extends Controller
                 $officerWorkEndTime = $value->work_end_time;
             }
 
-
             foreach ($data as $column => $value)
             {
                 $officerid = $value->officer_id;
@@ -183,8 +182,6 @@ class activityController extends Controller
             return redirect()->back()->with('success','You have successfully Inserted an Activity');
         }
     }
-
-
     
     function getActivityDetail($id)
     {
@@ -359,12 +356,82 @@ class activityController extends Controller
                 DB::table('activities')->where('activity_id',$req->activity_id)->update(array('status'=> 'active'));
             }else{
                 return redirect()->back()->with('error','Officer Or Visitor Deactivated');
-
             }
-        }
-        
-        
+        } 
         return redirect()->back()->with('success','Status changed Successfully');
+    }
+
+
+    function searchResult(Request $request)
+    {
+        
+        if($request->key == 'officer')
+        {
+            $res = DB::table('activities')
+            ->leftjoin('officers','activities.officer_id', '=', 'officers.id')
+            ->leftJoin('visitors','activities.visitor_id','=','visitors.id')
+            ->where('officer_first_name','like','%'.$request->searchData.'%')
+            ->orWhere('officer_last_name','like','%'.$request->searchData.'%')
+            ->orderBy('date', 'DESC')
+            ->get();
+
+            return $res;
+        }
+        elseif($request->key == 'visitor')
+        {
+            $res = DB::table('activities')
+            ->leftjoin('officers','activities.officer_id', '=', 'officers.id')
+            ->leftJoin('visitors','activities.visitor_id','=','visitors.id')
+            ->where('visitor_first_name','like','%'.$request->searchData.'%')
+            ->orWhere('visitor_last_name','like','%'.$request->searchData.'%')
+            ->orderBy('date', 'DESC')
+            ->get();
+
+            return $res;
+        }
+        elseif($request->key == 'type')
+        {
+            $res = DB::table('activities')
+            ->leftjoin('officers','activities.officer_id', '=', 'officers.id')
+            ->leftJoin('visitors','activities.visitor_id','=','visitors.id')
+            ->where($request->key,'like','%'.$request->searchData.'%')
+            ->orderBy('date', 'DESC')
+            ->get();
+
+            return $res;
+        }elseif( $request->key == 'status')
+        {
+            $res = DB::table('activities')
+            ->leftjoin('officers','activities.officer_id', '=', 'officers.id')
+            ->leftJoin('visitors','activities.visitor_id','=','visitors.id')
+            ->where($request->key,'like','%'.$request->searchData.'%')
+            ->orderBy('date', 'DESC')
+            ->get();
+
+            return $res;
+        }elseif($request->key == 'date')
+        {
+            $res = DB::table('activities')
+            ->leftjoin('officers','activities.officer_id', '=', 'officers.id')
+            ->leftJoin('visitors','activities.visitor_id','=','visitors.id')
+            ->whereDate('date', '>=',$request->fromdate)
+            ->whereDate('date', '<=',$request->todate)
+            ->orderBy('date', 'DESC')
+            ->get();
+
+            return $res;
+        }elseif($request->key == 'time')
+        {
+            $res = DB::table('activities')
+            ->leftjoin('officers','activities.officer_id', '=', 'officers.id')
+            ->leftJoin('visitors','activities.visitor_id','=','visitors.id')
+            ->whereTime('start_time', '>',$request->fromtime)
+            ->whereTime('start_time', '<',$request->totime)
+            ->orderBy('date', 'DESC')
+            ->get();
+
+            return $res;
+        }
     }
 
     function cancelActivity(Request $req)

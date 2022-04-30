@@ -25,11 +25,15 @@
             <th colspan="8">
                     <div class="row">
                         <div class="col-12">
-                            <form action="">
+                            <form action="" >
+                                @csrf
+                                <input type="hidden" name="filter_key" id="filter_key" value="officer">
                                 <input class="form-control" type="text" name="search" id="search" autocomplete="off" placeholder="Search">
                             </form>
                             <div  id="searchdate" style="display: none;">
                                 <form action="">
+                                    @csrf
+                                    <input type="hidden" name="filter_date" id="filter_date" value="date" >
                                     <div class="row">
                                         <div class="col-5 form-group">
                                             <label for="first_date">First Date</label>
@@ -40,13 +44,15 @@
                                             <input class="form-control " type="date" name="last_date" id="last_date" value="2020-01-01" autocomplete="off">
                                         </div>
                                         <div class="col-2 m-auto">
-                                            <button type="button" class="btn btn-info" id="searchbtn" value="officer">Search</button>
+                                            <button type="button" class="btn btn-info" id="searchdatebtn" value="officer">Search</button>
                                         </div>
                                     </div>
                                 </form> 
                             </div>
                             <div id="time" style="display: none;">
                                 <form action="">
+                                    @csrf 
+                                    <input type="hidden" name="filter_time" id="filter_time" value="time">
                                     <div class="row" >
                                         <div class="col-5 form-group">
                                             <label for="work_start_time">Start Time:<span class="text-danger">*</span></label>
@@ -61,7 +67,7 @@
                                             </div>
                                         </div>
                                         <div class="col-2 m-auto">
-                                            <button type="button" class="btn btn-info" id="searchbtn" value="officer">Search</button>
+                                            <button type="button" class="btn btn-info" id="searchtimebtn" value="officer">Search</button>
                                         </div>
                                     </div>
                                 </form>
@@ -98,7 +104,7 @@
           <th scope="col">Action</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="activity_table">
         <?php $count = 1; ?>
         @foreach ( $value['a'] as $data)
         <tr>
@@ -122,8 +128,8 @@
             @if ($data->status == 'active')
                 <td>
                     <form action="{{route('updateActivityStatus')}}" method="POST">
-                        @csrf
-                        @method('put')
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        <input name="_method" type="hidden" value="PUT">
                         <input type="hidden" name="officer_id" id="officer_id" value="{{$data->officer_id}}">
                         <input type="hidden" name="visitor_id" id="visitor_id" value="{{$data->visitor_id}}">
                         <input type="hidden" name="activity_id" id="activity_id" value="{{$data->activity_id}}">
@@ -135,8 +141,8 @@
             @elseif($data->status == 'inactive')
                 <td>
                     <form action="{{route('updateActivityStatus')}}" method="POST">
-                        @csrf
-                        @method('put')
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        <input name="_method" type="hidden" value="PUT">
                         <input type="hidden" name="officer_id" id="officer_id" value="{{$data->officer_id}}">
                         <input type="hidden" name="visitor_id" id="visitor_id" value="{{$data->visitor_id}}">
                         <input type="hidden" name="activity_id" id="activity_id" value="{{$data->activity_id}}">
@@ -159,11 +165,9 @@
                     </div>
                     <div class="col-lg-5 col-xl-5 col-md-12 col-sm-12">
                         <form action="{{route('cancelActivity')}}" method="POST">
-                            @csrf
-                            @method('put')
-                            <input type="hidden" name="activity_id" id="activity_id" value="{{$data->activity_id}}">
-                            <input type="hidden" name="status_value" id="status_value" value="{{$data->status}}">
-                        <button class="btn btn-sm btn-danger">Cancel</button>
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                            <input name="_method" type="hidden" value="PUT">
+                            <button class="btn btn-sm btn-danger" name="activity_id"  value="{{$data->activity_id}}">Cancel</button>
                         </form>
                     </div>
                 </div>

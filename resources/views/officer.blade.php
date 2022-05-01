@@ -11,6 +11,13 @@
             {{ $message }}
         </div>
 @endif
+
+@if(session()->has('error'))
+    <div class="alert alert-danger">
+        {{ session()->get('error') }}
+    </div>
+@endif
+
 <button type="button" class="btn btn-info float-end" data-bs-toggle="modal" data-bs-target="#addOfficer">
     <i class="fas fa-plus"></i>
   </button>

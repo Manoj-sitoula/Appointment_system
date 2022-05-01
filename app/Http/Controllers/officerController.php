@@ -28,28 +28,33 @@ class officerController extends Controller
             'days' => 'required',
         ]);
 
-        
-        
-        $id = rand(time(), 10000); 
-        $obj = new Officer();
-        $obj->id = $id;
-        $obj->officer_first_name = $request->officer_first_name;
-        $obj->officer_last_name = $request->officer_last_name;
-        $obj->officer_post = $request->post;
-        $obj->officer_status = $request->status;
-        $obj->work_start_time = $request->work_start_time;
-        $obj->work_end_time = $request->work_end_time;
-        $obj->save();
-
-        foreach($request->days as $key=>$name)
+        if($request->work_start_time > $request->work_end_time )
         {
-            $obj1 = new WorkDays();
-            $obj1->officer_id = $id;
-            $obj1->day_of_week = $name;
-            $obj1->save();
-        }
-        return redirect()->back()->with('success','You have successfully added an Officer');
+            return redirect()->back()->with('error','End time is smaller than Start Time');
+        }else{
+            $id = rand(time(), 10000); 
+            $obj = new Officer();
+            $obj->id = $id;
+            $obj->officer_first_name = $request->officer_first_name;
+            $obj->officer_last_name = $request->officer_last_name;
+            $obj->officer_post = $request->post;
+            $obj->officer_status = $request->status;
+            $obj->work_start_time = $request->work_start_time;
+            $obj->work_end_time = $request->work_end_time;
+            $obj->save();
 
+            foreach($request->days as $key=>$name)
+            {
+                $obj1 = new WorkDays();
+                $obj1->officer_id = $id;
+                $obj1->day_of_week = $name;
+                $obj1->save();
+            }
+            return redirect()->back()->with('success','You have successfully added an Officer');
+        }
+        
+        
+        
     }
 
     function getOfficerDetail($id)
@@ -73,27 +78,32 @@ class officerController extends Controller
             'new_work_end_time' => 'required',
         ]);
         
-        $id = $req->officer_id;
-        $obj = Officer::findOrFail($id);
-
-        $obj->officer_first_name = $req->new_officer_first_name;
-        $obj->officer_last_name = $req->new_officer_last_name;
-        $obj->officer_post = $req->new_post;
-        $obj->work_start_time = $req->new_work_start_time;
-        $obj->work_end_time = $req->new_work_end_time;
-        $obj->update();
-
-        WorkDays::where('officer_id', $id)->delete();
-
-        foreach($req->newdays as $key=>$name)
+        if($req->new_work_start_time > $req->new_work_end_time )
         {
-            $obj1 = new WorkDays();
-            $obj1->officer_id = $id;
-            $obj1->day_of_week = $name;
-            $obj1->save();
-        }
+            return redirect()->back()->with('error','End time is smaller than Start Time');
+        }else{
+            $id = $req->officer_id;
+            $obj = Officer::findOrFail($id);
 
-        return redirect()->back()->with('success','You have successfully Updated an Officer');
+            $obj->officer_first_name = $req->new_officer_first_name;
+            $obj->officer_last_name = $req->new_officer_last_name;
+            $obj->officer_post = $req->new_post;
+            $obj->work_start_time = $req->new_work_start_time;
+            $obj->work_end_time = $req->new_work_end_time;
+            $obj->update();
+
+            WorkDays::where('officer_id', $id)->delete();
+
+            foreach($req->newdays as $key=>$name)
+            {
+                $obj1 = new WorkDays();
+                $obj1->officer_id = $id;
+                $obj1->day_of_week = $name;
+                $obj1->save();
+            }
+
+            return redirect()->back()->with('success','You have successfully Updated an Officer');
+        }
     }
 
     function updateOfficerStatus(Request $req)

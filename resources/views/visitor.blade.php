@@ -7,10 +7,15 @@
     <span class="breadcrumb-item" >Visitor</span>
 </nav>
 @if ($message = Session::get('success'))
-        <div class="alert alert-success" role="alert">
-            {{ $message }}
-        </div>
-    @endif
+    <div class="alert alert-success" role="alert">
+       {{ $message }}
+    </div>
+@endif
+@if(session()->has('error'))
+    <div class="alert alert-danger">
+        {{ session()->get('error') }}
+    </div>
+@endif
     <button type="button" class="btn btn-info float-end" data-bs-toggle="modal" data-bs-target="#addVisitor">
         <i class="fas fa-plus"></i>
       </button>

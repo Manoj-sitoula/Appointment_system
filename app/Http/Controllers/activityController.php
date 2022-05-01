@@ -52,59 +52,101 @@ class activityController extends Controller
                 'end_time' => 'required',
             ]);
         }
-        
-        if(count($data) > 0)
+
+        $now = date("Y-m-d",time());
+
+        if($request->start_time > $request->end_time  || $request->newdate < $now)
         {
-
-            $days = DB::table('work_days')
-                    ->where('officer_id','=',$request->officer_id)
-                    ->get()
-                    ->all();
-
-            $requestedDay = strtolower(date("l", strtotime($request->date)));
-
-            $isInWorkDay = false;
-            
-            foreach ($days as $column => $value)
+            return redirect()->back()->with('error','End time is smaller than Start Time or Invalid Date');
+        }else
+        {
+            if(count($data) > 0)
             {
-                if($requestedDay == $value->day_of_week){
-                   $isInWorkDay = true;
-                   break;
-                }
-            }
 
-            $officeTime = DB::table('officers')
-                        ->where('id','=',$request->officer_id)
+                $days = DB::table('work_days')
+                        ->where('officer_id','=',$request->officer_id)
                         ->get()
                         ->all();
-        
-            foreach ($officeTime as $column => $value)
-            {
-                $officerWorkStartTime = $value->work_start_time ;
-                $officerWorkEndTime = $value->work_end_time;
-            }
 
-            foreach ($data as $column => $value)
-            {
-                $officerid = $value->officer_id;
-                $visitorid = $value->visitor_id;
-                $type = $value->type;
-                $status = $value->status;
-                $date = $value->date;
-                $starttime = $value->start_time;
-                $endtime = $value->end_time;
-            
-            if($isInWorkDay)
-            {
-                if($request->start_time >= $officerWorkStartTime && $request->end_time <= $officerWorkEndTime)
+                $requestedDay = strtolower(date("l", strtotime($request->date)));
+
+                $isInWorkDay = false;
+                
+                foreach ($days as $column => $value)
                 {
-                    if($request->date == $date)
+                    if($requestedDay == $value->day_of_week){
+                    $isInWorkDay = true;
+                    break;
+                    }
+                }
+
+
+                $officeTime = DB::table('officers')
+                            ->where('id','=',$request->officer_id)
+                            ->get()
+                            ->all();
+            
+                foreach ($officeTime as $column => $value)
+                {
+                    $officerWorkStartTime = $value->work_start_time ;
+                    $officerWorkEndTime = $value->work_end_time;
+                }
+
+                foreach ($data as $column => $value)
+                {
+                    $officerid = $value->officer_id;
+                    $visitorid = $value->visitor_id;
+                    $type = $value->type;
+                    $status = $value->status;
+                    $date = $value->date;
+                    $starttime = $value->start_time;
+                    $endtime = $value->end_time;
+                
+                    if($isInWorkDay)
                     {
-                        if( $request->officer_id == $officerid || $request->visitor_id == $visitorid)
+                        if($request->start_time >= $officerWorkStartTime && $request->end_time <= $officerWorkEndTime)
                         {
-                            if($status != "cancelled")
+                            if($request->date == $date)
                             {
-                                if(((strtotime("$request->start_time") < strtotime("$starttime") && strtotime("$request->end_time") < strtotime("$starttime")) || (strtotime("$request->start_time") > strtotime("$endtime") && strtotime("$request->end_time") > strtotime("$endtime"))) && (strtotime("$request->start_time") < strtotime("$request->end_time")))
+                                if( $request->officer_id == $officerid || $request->visitor_id == $visitorid)
+                                {
+                                    if($status != "cancelled")
+                                    {
+                                        if(((strtotime("$request->start_time") < strtotime("$starttime") && strtotime("$request->end_time") < strtotime("$starttime")) || (strtotime("$request->start_time") > strtotime("$endtime") && strtotime("$request->end_time") > strtotime("$endtime"))) && (strtotime("$request->start_time") < strtotime("$request->end_time")))
+                                        {
+                                            $obj->officer_id = $request->officer_id;
+                                            $obj->visitor_id = $request->visitor_id;
+                                            $obj->name = $request->name;
+                                            $obj->type = $request->type;
+                                            $obj->status = $request->status;
+                                            $obj->date = $request->date;
+                                            $obj->start_time = $request->start_time;
+                                            $obj->end_time = $request->end_time;
+                                            $obj->added_on = date("Y-m-d h:i:s",time());
+
+                                            $obj->save();
+
+                                            return redirect()->back()->with('success','You have successfully Inserted an Activity');
+
+                                        }else{
+                                            return redirect()->back()->with('error','Officer or Visitor already has Appointment or Officer is on Break or Leave.');
+                                        }
+
+                                    }else{
+                                        $obj->officer_id = $request->officer_id;
+                                        $obj->visitor_id = $request->visitor_id;
+                                        $obj->name = $request->name;
+                                        $obj->type = $request->type;
+                                        $obj->status = $request->status;
+                                        $obj->date = $request->date;
+                                        $obj->start_time = $request->start_time;
+                                        $obj->end_time = $request->end_time;
+                                        $obj->added_on = date("Y-m-d h:i:s",time());
+                                        $obj->save();
+                                        return redirect()->back()->with('success','You have successfully Inserted an Activity');
+                                    }
+                                    
+                                }else
                                 {
                                     $obj->officer_id = $request->officer_id;
                                     $obj->visitor_id = $request->visitor_id;
@@ -119,84 +161,49 @@ class activityController extends Controller
                                     $obj->save();
 
                                     return redirect()->back()->with('success','You have successfully Inserted an Activity');
-
-                                }else{
-                                    return redirect()->back()->with('error','Officer or Visitor already has Appointment or Officer is on Break or Leave.');
                                 }
-
-                            }else{
+                            }else
+                            {
                                 $obj->officer_id = $request->officer_id;
-                                    $obj->visitor_id = $request->visitor_id;
-                                    $obj->name = $request->name;
-                                    $obj->type = $request->type;
-                                    $obj->status = $request->status;
-                                    $obj->date = $request->date;
-                                    $obj->start_time = $request->start_time;
-                                    $obj->end_time = $request->end_time;
-                                    $obj->added_on = date("Y-m-d h:i:s",time());
+                                $obj->visitor_id = $request->visitor_id;
+                                $obj->name = $request->name;
+                                $obj->type = $request->type;
+                                $obj->status = $request->status;
+                                $obj->date = $request->date;
+                                $obj->start_time = $request->start_time;
+                                $obj->end_time = $request->end_time;
+                                $obj->added_on = date("Y-m-d h:i:s",time());
 
-                                    $obj->save();
+                                $obj->save();
 
-                                    return redirect()->back()->with('success','You have successfully Inserted an Activity');
+                                return redirect()->back()->with('success','You have successfully Inserted an Activity');
                             }
-                            
+
                         }else
                         {
-                            $obj->officer_id = $request->officer_id;
-                            $obj->visitor_id = $request->visitor_id;
-                            $obj->name = $request->name;
-                            $obj->type = $request->type;
-                            $obj->status = $request->status;
-                            $obj->date = $request->date;
-                            $obj->start_time = $request->start_time;
-                            $obj->end_time = $request->end_time;
-                            $obj->added_on = date("Y-m-d h:i:s",time());
-
-                            $obj->save();
-
-                            return redirect()->back()->with('success','You have successfully Inserted an Activity');
+                            return redirect()->back()->with('error',' Officer has no working hour in given time.');
                         }
                     }else
                     {
-                        $obj->officer_id = $request->officer_id;
-                        $obj->visitor_id = $request->visitor_id;
-                        $obj->name = $request->name;
-                        $obj->type = $request->type;
-                        $obj->status = $request->status;
-                        $obj->date = $request->date;
-                        $obj->start_time = $request->start_time;
-                        $obj->end_time = $request->end_time;
-                        $obj->added_on = date("Y-m-d h:i:s",time());
-
-                        $obj->save();
-
-                        return redirect()->back()->with('success','You have successfully Inserted an Activity');
+                        return redirect()->back()->with('error',' Officer is not availabe.');
                     }
-
-                }else
-                {
-                    return redirect()->back()->with('error',' Officer has no working hour in given time.');
                 }
             }else
             {
-                return redirect()->back()->with('error',' Officer is not availabe.');
-            }
-        }
-        }else
-        {
-            $obj->officer_id = $request->officer_id;
-            $obj->visitor_id = $request->visitor_id;
-            $obj->name = $request->name;
-            $obj->type = $request->type;
-            $obj->status = $request->status;
-            $obj->date = $request->date;
-            $obj->start_time = $request->start_time;
-            $obj->end_time = $request->end_time;
-            $obj->added_on = date("Y-m-d h:i:s",time());
+                $obj->officer_id = $request->officer_id;
+                $obj->visitor_id = $request->visitor_id;
+                $obj->name = $request->name;
+                $obj->type = $request->type;
+                $obj->status = $request->status;
+                $obj->date = $request->date;
+                $obj->start_time = $request->start_time;
+                $obj->end_time = $request->end_time;
+                $obj->added_on = date("Y-m-d h:i:s",time());
 
-            $obj->save();
+                $obj->save();
 
-            return redirect()->back()->with('success','You have successfully Inserted an Activity');
+                return redirect()->back()->with('success','You have successfully Inserted an Activity');
+            }        
         }
     }
     
@@ -223,60 +230,82 @@ class activityController extends Controller
 
     function updateActivity(Request $request)
     {
-        $data = DB::table('activities')->where('activity_id','!=',$request->newactivity_id)->get()->all();
-        
-        //$obj = Activity::findOrFail($request->newactivity_id);
-        $obj = DB::table('activities')->where('activity_id',$request->newactivity_id)->get();
+        $now = date("Y-m-d",time());
 
-
-        $days = DB::table('work_days')
-        ->where('officer_id','=',$request->newofficer_id)
-        ->get()
-        ->all();
-
-        $requestedDay = strtolower(date("l", strtotime($request->newdate)));
-
-        $isInWorkDay = false;
-
-        foreach ($days as $column => $value)
+        if($request->newstart_time > $request->newend_time || $request->newdate < $now)
         {
-            if($requestedDay == $value->day_of_week){
-            $isInWorkDay = true;
-            break;
-            }
-        }
-
-        $officeTime = DB::table('officers')
-                    ->where('id','=',$request->newofficer_id)
-                    ->get()
-                    ->all();
-
-        foreach ($officeTime as $column => $value)
+            return redirect()->back()->with('error','End time is smaller than Start Time or Date is Invalid');
+        }else
         {
-            $officerWorkStartTime = $value->work_start_time ;
-            $officerWorkEndTime = $value->work_end_time;
-        }
+            $data = DB::table('activities')->where('activity_id','!=',$request->newactivity_id)->get()->all();
+            
+            $days = DB::table('work_days')
+            ->where('officer_id','=',$request->newofficer_id)
+            ->get()
+            ->all();
 
+            $requestedDay = strtolower(date("l", strtotime($request->newdate)));
 
-        foreach ($data as $column => $value)
-        {
-            $officerid = $value->officer_id;
-            $visitorid = $value->visitor_id;
-            $date = $value->date;
-            $starttime = $value->start_time;
-            $endtime = $value->end_time;
-        
-            if($isInWorkDay)
+            $isInWorkDay = false;
+
+            foreach ($days as $column => $value)
             {
-                if($request->newstart_time >= $officerWorkStartTime && $request-> newend_time <= $officerWorkEndTime)
+                if($requestedDay == $value->day_of_week){
+                $isInWorkDay = true;
+                break;
+                }
+            }
+
+            $officeTime = DB::table('officers')
+                        ->where('id','=',$request->newofficer_id)
+                        ->get()
+                        ->all();
+
+            foreach ($officeTime as $column => $value)
+            {
+                $officerWorkStartTime = $value->work_start_time ;
+                $officerWorkEndTime = $value->work_end_time;
+            }
+
+
+            foreach ($data as $column => $value)
+            {
+                $officerid = $value->officer_id;
+                $visitorid = $value->visitor_id;
+                $date = $value->date;
+                $starttime = $value->start_time;
+                $endtime = $value->end_time;
+            
+                if($isInWorkDay)
                 {
-                    
-                    if($request->newdate == $date)
+                    if($request->newstart_time >= $officerWorkStartTime && $request-> newend_time <= $officerWorkEndTime)
                     {
                         
-                        if($request->newvisitor_id == $visitorid || $request->newofficer_id == $officerid)
+                        if($request->newdate == $date)
                         {
-                            if(((strtotime("$request->newstart_time") < strtotime("$starttime") && strtotime("$request->newend_time") < strtotime("$starttime")) || (strtotime("$request->newstart_time") > strtotime("$endtime") && strtotime("$request->newend_time") > strtotime("$endtime"))) && (strtotime("$request->newstart_time") < strtotime("$request->newend_time")))
+                            
+                            if($request->newvisitor_id == $visitorid || $request->newofficer_id == $officerid)
+                            {
+                                if(((strtotime("$request->newstart_time") < strtotime("$starttime") && strtotime("$request->newend_time") < strtotime("$starttime")) || (strtotime("$request->newstart_time") > strtotime("$endtime") && strtotime("$request->newend_time") > strtotime("$endtime"))) && (strtotime("$request->newstart_time") < strtotime("$request->newend_time")))
+                                {
+                                    $updatedData = array(
+                                        "officer_id" => $request->newofficer_id,
+                                        "visitor_id" => $request->newvisitor_id,
+                                        "name" => $request->newname,
+                                        "date" => $request->newdate,
+                                        "start_time" => $request->newstart_time,
+                                        "end_time" => $request->newend_time,
+                                        "added_on" => date("Y-m-d h:i:s",time()),
+                                    );
+                                    
+                                    DB::table('activities')->where('activity_id',$request->newactivity_id)->update($updatedData);
+
+                                    return redirect()->back()->with('success','You have successfully Updated an Activity');
+                                }else{
+                                    return redirect()->back()->with('error','Officer or Visitor already has Appointment or Officer is on Break or Leave.');
+                                }
+
+                            }else
                             {
                                 $updatedData = array(
                                     "officer_id" => $request->newofficer_id,
@@ -288,13 +317,10 @@ class activityController extends Controller
                                     "added_on" => date("Y-m-d h:i:s",time()),
                                 );
                                 
-                                DB::table('activities')->where('activity_id',$request->newactivity_id)->update($updatedData);
+                                    DB::table('activities')->where('activity_id',$request->newactivity_id)->update($updatedData);
 
-                                return redirect()->back()->with('success','You have successfully Updated an Activity');
-                            }else{
-                                return redirect()->back()->with('error','Officer or Visitor already has Appointment or Officer is on Break or Leave.');
+                                    return redirect()->back()->with('success','You have successfully Updated an Activity');
                             }
-
                         }else
                         {
                             $updatedData = array(
@@ -307,35 +333,20 @@ class activityController extends Controller
                                 "added_on" => date("Y-m-d h:i:s",time()),
                             );
                             
-                                DB::table('activities')->where('activity_id',$request->newactivity_id)->update($updatedData);
+                            DB::table('activities')->where('activity_id',$request->newactivity_id)->update($updatedData);
 
-                                return redirect()->back()->with('success','You have successfully Inserted an Activity');
+
+                            return redirect()->back()->with('success','You have successfully Updated an Activity');
                         }
+
                     }else
                     {
-                        $updatedData = array(
-                            "officer_id" => $request->newofficer_id,
-                            "visitor_id" => $request->newvisitor_id,
-                            "name" => $request->newname,
-                            "date" => $request->newdate,
-                            "start_time" => $request->newstart_time,
-                            "end_time" => $request->newend_time,
-                            "added_on" => date("Y-m-d h:i:s",time()),
-                        );
-                        
-                        DB::table('activities')->where('activity_id',$request->newactivity_id)->update($updatedData);
-
-
-                        return redirect()->back()->with('success','You have successfully Inserted an Activity');
+                        return redirect()->back()->with('error',' Officer has no working hour in given time.');
                     }
-
                 }else
                 {
-                    return redirect()->back()->with('error',' Officer has no working hour in given time.');
+                    return redirect()->back()->with('error',' Officer is not availabe.');
                 }
-            }else
-            {
-                return redirect()->back()->with('error',' Officer is not availabe.');
             }
         }
     }

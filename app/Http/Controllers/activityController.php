@@ -265,19 +265,37 @@ class activityController extends Controller
             $date = $value->date;
             $starttime = $value->start_time;
             $endtime = $value->end_time;
-        }
-
-        if($isInWorkDay)
-        {
-            if($request->newstart_time >= $officerWorkStartTime && $request-> newend_time <= $officerWorkEndTime)
+        
+            if($isInWorkDay)
             {
-                
-                if($request->newdate == $date)
+                if($request->newstart_time >= $officerWorkStartTime && $request-> newend_time <= $officerWorkEndTime)
                 {
                     
-                    if($request->newvisitor_id == $visitorid || $request->newofficer_id == $officerid)
+                    if($request->newdate == $date)
                     {
-                        if(((strtotime("$request->newstart_time") < strtotime("$starttime") && strtotime("$request->newend_time") < strtotime("$starttime")) || (strtotime("$request->newstart_time") > strtotime("$endtime") && strtotime("$request->newend_time") > strtotime("$endtime"))) && (strtotime("$request->newstart_time") < strtotime("$request->newend_time")))
+                        
+                        if($request->newvisitor_id == $visitorid || $request->newofficer_id == $officerid)
+                        {
+                            if(((strtotime("$request->newstart_time") < strtotime("$starttime") && strtotime("$request->newend_time") < strtotime("$starttime")) || (strtotime("$request->newstart_time") > strtotime("$endtime") && strtotime("$request->newend_time") > strtotime("$endtime"))) && (strtotime("$request->newstart_time") < strtotime("$request->newend_time")))
+                            {
+                                $updatedData = array(
+                                    "officer_id" => $request->newofficer_id,
+                                    "visitor_id" => $request->newvisitor_id,
+                                    "name" => $request->newname,
+                                    "date" => $request->newdate,
+                                    "start_time" => $request->newstart_time,
+                                    "end_time" => $request->newend_time,
+                                    "added_on" => date("Y-m-d h:i:s",time()),
+                                );
+                                
+                                DB::table('activities')->where('activity_id',$request->newactivity_id)->update($updatedData);
+
+                                return redirect()->back()->with('success','You have successfully Updated an Activity');
+                            }else{
+                                return redirect()->back()->with('error','Officer or Visitor already has Appointment or Officer is on Break or Leave.');
+                            }
+
+                        }else
                         {
                             $updatedData = array(
                                 "officer_id" => $request->newofficer_id,
@@ -289,13 +307,10 @@ class activityController extends Controller
                                 "added_on" => date("Y-m-d h:i:s",time()),
                             );
                             
-                            DB::table('activities')->where('activity_id',$request->newactivity_id)->update($updatedData);
+                                DB::table('activities')->where('activity_id',$request->newactivity_id)->update($updatedData);
 
-                            return redirect()->back()->with('success','You have successfully Updated an Activity');
-                        }else{
-                            return redirect()->back()->with('error','Officer or Visitor already has Appointment or Officer is on Break or Leave.');
+                                return redirect()->back()->with('success','You have successfully Inserted an Activity');
                         }
-
                     }else
                     {
                         $updatedData = array(
@@ -308,35 +323,20 @@ class activityController extends Controller
                             "added_on" => date("Y-m-d h:i:s",time()),
                         );
                         
-                            DB::table('activities')->where('activity_id',$request->newactivity_id)->update($updatedData);
+                        DB::table('activities')->where('activity_id',$request->newactivity_id)->update($updatedData);
 
-                            return redirect()->back()->with('success','You have successfully Inserted an Activity');
+
+                        return redirect()->back()->with('success','You have successfully Inserted an Activity');
                     }
+
                 }else
                 {
-                    $updatedData = array(
-                        "officer_id" => $request->newofficer_id,
-                        "visitor_id" => $request->newvisitor_id,
-                        "name" => $request->newname,
-                        "date" => $request->newdate,
-                        "start_time" => $request->newstart_time,
-                        "end_time" => $request->newend_time,
-                        "added_on" => date("Y-m-d h:i:s",time()),
-                    );
-                    
-                    DB::table('activities')->where('activity_id',$request->newactivity_id)->update($updatedData);
-
-
-                    return redirect()->back()->with('success','You have successfully Inserted an Activity');
+                    return redirect()->back()->with('error',' Officer has no working hour in given time.');
                 }
-
             }else
             {
-                return redirect()->back()->with('error',' Officer has no working hour in given time.');
+                return redirect()->back()->with('error',' Officer is not availabe.');
             }
-        }else
-        {
-            return redirect()->back()->with('error',' Officer is not availabe.');
         }
     }
 

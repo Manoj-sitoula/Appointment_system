@@ -35,8 +35,8 @@ class activityController extends Controller
         if($request->type == "Appointment")
         {
             $request->validate([
-                'officer_id' => 'bail|required', 
-                'visitor_id' => 'bail|required',
+                'officer_id' => 'required', 
+                'visitor_id' => 'required',
                 'name' => 'required',
                 'date' => 'required',
                 'start_time' => 'required',
@@ -46,14 +46,14 @@ class activityController extends Controller
         }else
         {
             $request->validate([
-                'officer_id' => 'bail|required',
+                'officer_id' => 'required',
                 'name' => 'required',
                 'date' => 'required',
                 'start_time' => 'required',
                 'end_time' => 'required',
             ]);
-        } 
-
+        }
+        
         if(count($data) > 0)
         {
 
@@ -103,27 +103,46 @@ class activityController extends Controller
                     
                     if($request->date == $date)
                     {
-                        if($request->visitor_id == $visitorid || $request->officer_id == $officerid)
+                        if( $request->officer_id == $officerid || $request->visitor_id == $visitorid || $request->visitor_id == null)
                         {
-                            if(((strtotime("$request->start_time") < strtotime("$starttime") && strtotime("$request->end_time") < strtotime("$starttime")) || (strtotime("$request->start_time") > strtotime("$endtime") && strtotime("$request->end_time") > strtotime("$endtime"))) && (strtotime("$request->start_time") < strtotime("$request->end_time")))
+                            if($status != "cancelled")
                             {
-                                $obj->officer_id = $request->officer_id;
-                                $obj->visitor_id = $request->visitor_id;
-                                $obj->name = $request->name;
-                                $obj->type = $request->type;
-                                $obj->status = $request->status;
-                                $obj->date = $request->date;
-                                $obj->start_time = $request->start_time;
-                                $obj->end_time = $request->end_time;
-                                $obj->added_on = date("Y-m-d h:i:s",time());
+                                if(((strtotime("$request->start_time") < strtotime("$starttime") && strtotime("$request->end_time") < strtotime("$starttime")) || (strtotime("$request->start_time") > strtotime("$endtime") && strtotime("$request->end_time") > strtotime("$endtime"))) && (strtotime("$request->start_time") < strtotime("$request->end_time")))
+                                {
+                                    $obj->officer_id = $request->officer_id;
+                                    $obj->visitor_id = $request->visitor_id;
+                                    $obj->name = $request->name;
+                                    $obj->type = $request->type;
+                                    $obj->status = $request->status;
+                                    $obj->date = $request->date;
+                                    $obj->start_time = $request->start_time;
+                                    $obj->end_time = $request->end_time;
+                                    $obj->added_on = date("Y-m-d h:i:s",time());
 
-                                $obj->save();
+                                    $obj->save();
 
-                                return redirect()->back()->with('success','You have successfully Inserted an Activity');
+                                    return redirect()->back()->with('success','You have successfully Inserted an Activity');
 
+                                }else{
+                                    return redirect()->back()->with('error','Officer or Visitor already has Appointment or Officer is on Break or Leave.');
+                                }
                             }else{
-                                return redirect()->back()->with('error','Officer or Visitor already has Appointment or Officer is on Break or Leave.');
+                                $obj->officer_id = $request->officer_id;
+                                    $obj->visitor_id = $request->visitor_id;
+                                    $obj->name = $request->name;
+                                    $obj->type = $request->type;
+                                    $obj->status = $request->status;
+                                    $obj->date = $request->date;
+                                    $obj->start_time = $request->start_time;
+                                    $obj->end_time = $request->end_time;
+                                    $obj->added_on = date("Y-m-d h:i:s",time());
+
+                                    $obj->save();
+
+                                    return redirect()->back()->with('success','You have successfully Inserted an Activity');
+
                             }
+                            
                         }else
                         {
                                 $obj->officer_id = $request->officer_id;
@@ -404,7 +423,7 @@ class activityController extends Controller
             $res = DB::table('activities')
             ->leftjoin('officers','activities.officer_id', '=', 'officers.id')
             ->leftJoin('visitors','activities.visitor_id','=','visitors.id')
-            ->where($request->key,'like','%'.$request->searchData.'%')
+            ->where($request->key,'like',$request->searchData.'%')
             ->orderBy('date', 'DESC')
             ->get();
 
@@ -425,8 +444,8 @@ class activityController extends Controller
             $res = DB::table('activities')
             ->leftjoin('officers','activities.officer_id', '=', 'officers.id')
             ->leftJoin('visitors','activities.visitor_id','=','visitors.id')
-            ->whereTime('start_time', '>',$request->fromtime)
-            ->whereTime('start_time', '<',$request->totime)
+            ->whereTime('start_time', '>',$request->fromtime,)
+            ->whereTime('start_time', '<',$request->totime,)
             ->orderBy('date', 'DESC')
             ->get();
 
@@ -439,4 +458,10 @@ class activityController extends Controller
         DB::table('activities')->where('activity_id',$req->activity_id)->update(array('status'=> 'cancelled'));
         return redirect()->back()->with('success','Activity Cancelled Successfully');
     }
+
+
+    function totalAppointments()
+   {
+       return Activity::where('type','=', 'Appointment')->count();
+   }
 }

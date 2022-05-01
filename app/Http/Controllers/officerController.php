@@ -25,11 +25,10 @@ class officerController extends Controller
             'status' => 'required',
             'work_start_time' => 'required',
             'work_end_time' => 'required',
+            'days' => 'required',
         ]);
 
-        // DB::transaction(function(){
-            
-        // });
+        
         
         $id = rand(time(), 10000); 
         $obj = new Officer();
@@ -131,5 +130,11 @@ class officerController extends Controller
        return response()->json([
         'data'=>$data,
     ]);
+   }
+
+
+   function totalOfficers()
+   {
+       return Officer::count();
    }
 }

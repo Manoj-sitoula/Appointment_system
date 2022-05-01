@@ -24,8 +24,7 @@
 	                                        <div class="col-10 d-flex align-items-center">
 	                                            <div class="numbers">
 	                                                <p class="card-category text-white h4">Officer</p>
-	                                                <h5 class="card-title text-center text-white">
-	                                                    80</h5>
+	                                                <h3 class="card-title text-center text-white" id="total_officer"></h5>
 	                                            </div>
 	                                        </div>
 	                                    </div>
@@ -46,8 +45,7 @@
 	                                        <div class="col-10 d-flex align-items-center">
 	                                            <div class="numbers">
 	                                                <p class="card-category text-white h4">Visitor</p>
-	                                                <h5 class="card-title text-center text-white">
-	                                                    40</h5>
+	                                                <h5 class="card-title text-center text-white" id="total_visitor"></h5>
 	                                            </div>
 	                                        </div>
 	                                    </div>
@@ -67,8 +65,7 @@
 	                                        <div class="col-10 d-flex align-items-center">
 	                                            <div class="numbers">
 	                                                <p class="card-category text-white h4">Appointments</p>
-	                                                <h5 class="card-title text-center text-white">
-	                                                    50</h5>
+	                                                <h5 class="card-title text-center text-white" id="total_appointment"> </h5>
 	                                            </div>
 	                                        </div>
 	                                    </div>
@@ -81,4 +78,6 @@
 
             </div>
         </main>
+		
+<script src="{{asset('assets/js/custom_js/customDashboard.js')}}"></script>
 @endsection

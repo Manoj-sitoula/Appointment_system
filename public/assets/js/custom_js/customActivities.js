@@ -1,4 +1,7 @@
 
+var token_id = $("meta[name='csrf-token']").attr("content");
+
+
 $(document).ready(function(){
     
 $(".chosen").chosen({width: "95%"});
@@ -116,10 +119,20 @@ $(document).ready(function(){
                 searchData : $('#search').val(),
             },
             success:function(response){
+                
+        console.log(response);
                 var i =1;
                 $('#activity_table').html(' ');
                 $.each(response,function(index,item){
 
+                    if(item.visitor_first_name == null && item.visitor_last_name == null)
+                    {
+                        var name = " ";
+                    }
+                    else
+                    {
+                        var name  = item.visitor_first_name+' '+item.visitor_last_name;
+                    }
                 if (item.type == 'Appointment')
                 {
                    var type = '<button class="btn btn-primary btn-sm">Appointment</button>';
@@ -136,20 +149,20 @@ $(document).ready(function(){
 
                 if (item.status == 'active')
                 {
-                    var status = ' <form action="/updateActivityStatus" method="POST"> <input type="hidden" name="_token" id="csrf-token" value="{{ Session::token() }}" /> <input name="_method" type="hidden" value="PUT"> <input type="hidden" name="officer_id" id="officer_id" value="'+item.officer_id+'"><input type="hidden" name="visitor_id" id="visitor_id" value="'+item.visitor_id+'"><input type="hidden" name="activity_id" id="activity_id" value="'+item.activity_id+'"> <input type="hidden" name="status_value" id="status_value" value="'+item.status+'"><button class="btn btn-sm btn-success" value="active">Active</button></form>';
+                    var status = ' <form action="/updateActivityStatus" method="POST"> <input type="hidden" name="_token" id="csrf-token" value="'+token_id+'" /> <input name="_method" type="hidden" value="PUT"> <input type="hidden" name="officer_id" id="officer_id" value="'+item.officer_id+'"><input type="hidden" name="visitor_id" id="visitor_id" value="'+item.visitor_id+'"><input type="hidden" name="activity_id" id="activity_id" value="'+item.activity_id+'"> <input type="hidden" name="status_value" id="status_value" value="'+item.status+'"><button class="btn btn-sm btn-success" value="active">Active</button></form>';
                     // var status = '<button class="btn btn-sm btn-success">Active</button>';
                 }else if(item.status == 'inactive')
                 {    
-                    var status = ' <form action="/updateActivityStatus" method="POST"> <input type="hidden" name="_token" id="csrf-token" value="{{ Session::token() }}" /> <input name="_method" type="hidden" value="PUT"> <input type="hidden" name="officer_id" id="officer_id" value="'+item.officer_id+'"><input type="hidden" name="visitor_id" id="visitor_id" value="'+item.visitor_id+'"><input type="hidden" name="activity_id" id="activity_id" value="'+item.activity_id+'"> <input type="hidden" name="status_value" id="status_value" value="'+item.status+'"><button class="btn btn-sm btn-danger" value="active">InActive</button></form>';
+                    var status = ' <form action="/updateActivityStatus" method="POST"> <input type="hidden" name="_token" id="csrf-token" value="'+token_id+'" /> <input name="_method" type="hidden" value="PUT"> <input type="hidden" name="officer_id" id="officer_id" value="'+item.officer_id+'"><input type="hidden" name="visitor_id" id="visitor_id" value="'+item.visitor_id+'"><input type="hidden" name="activity_id" id="activity_id" value="'+item.activity_id+'"> <input type="hidden" name="status_value" id="status_value" value="'+item.status+'"><button class="btn btn-sm btn-danger" value="active">InActive</button></form>';
                     // var status = '<button class="btn btn-sm btn-danger">InActive</button>';
                 }else{
                     var status = '<button class="btn btn-sm btn-warning">Cancelled</button>';   
                 }
 
-                var action ='<div class="row"><div class="col-lg-4 col-xl-5 col-md-12 col-sm-12 col"><button type="button" class="btn btn-info btn-sm" id="updatebutton" data-bs-toggle="modal" data-bs-target="#updateActivity" value="'+item.activity_id+'">Update</button></div><div class="col-lg-5 col-xl-5 col-md-12 col-sm-12"><form action="\cancelActivity" method="POST"><input type="hidden" name="_token" id="csrf-token" value="{{ Session::token() }}" /><input name="_method" type="hidden" value="PUT"><button class="btn btn-sm btn-danger" name="activity_id"  value="'+item.activity_id+'">Cancel</button></form></div></div>';
+                var action ='<div class="row"><div class="col-lg-4 col-xl-5 col-md-12 col-sm-12 col"><button type="button" class="btn btn-info btn-sm" id="updatebutton" data-bs-toggle="modal" data-bs-target="#updateActivity" value="'+item.activity_id+'">Update</button></div><div class="col-lg-5 col-xl-5 col-md-12 col-sm-12"><form action="\cancelActivity" method="POST"><input type="hidden" name="_token" id="csrf-token" value="'+token_id+'" /><input name="_method" type="hidden" value="PUT"><button class="btn btn-sm btn-danger" name="activity_id"  value="'+item.activity_id+'">Cancel</button></form></div></div>';
              
                     
-                $('#activity_table').append('<tr><td>'+i +'</td><td>'+ item.officer_first_name+' '+item.officer_last_name+'</td><td>'+item.visitor_first_name+' '+item.visitor_last_name +'</td><td>'+ item.name+'</td> <td>'+ type+'</td><td>'+status +'</td><td>'+item.date +'</td><td>'+item.start_time +'</td><td>'+item.end_time +'</td><td>'+action +'</td></tr>');
+                $('#activity_table').append('<tr><td>'+i +'</td><td>'+ item.officer_first_name+' '+item.officer_last_name+'</td><td>'+name +'</td><td>'+ item.name+'</td> <td>'+ type+'</td><td>'+status +'</td><td>'+item.date +'</td><td>'+item.start_time +'</td><td>'+item.end_time +'</td><td>'+action +'</td></tr>');
                     i++;
                 });
             }
@@ -170,6 +183,16 @@ $(document).ready(function(){
                 $('#activity_table').html(' ');
                 $.each(response,function(index,item){
 
+                    if(item.visitor_first_name == null && item.visitor_last_name == null)
+                    {
+                        var name = " ";
+                        
+                    }
+                    else
+                    {
+                        var name  = item.visitor_first_name+' '+item.visitor_last_name;
+                    }
+
                 if (item.type == 'Appointment')
                 {
                    var type = '<button class="btn btn-primary btn-sm">Appointment</button>';
@@ -185,18 +208,18 @@ $(document).ready(function(){
 
                 if (item.status == 'active')
                 {
-                    var status = ' <form action="/updateActivityStatus" method="POST"> <input type="hidden" name="_token" id="csrf-token" value="{{ Session::token() }}" /> <input name="_method" type="hidden" value="PUT"> <input type="hidden" name="officer_id" id="officer_id" value="'+item.officer_id+'"><input type="hidden" name="visitor_id" id="visitor_id" value="'+item.visitor_id+'"><input type="hidden" name="activity_id" id="activity_id" value="'+item.activity_id+'"> <input type="hidden" name="status_value" id="status_value" value="'+item.status+'"><button class="btn btn-sm btn-success" value="active">Active</button></form>';
+                    var status = ' <form action="/updateActivityStatus" method="POST"> <input type="hidden" name="_token" id="csrf-token" value="'+token_id+'" /> <input name="_method" type="hidden" value="PUT"> <input type="hidden" name="officer_id" id="officer_id" value="'+item.officer_id+'"><input type="hidden" name="visitor_id" id="visitor_id" value="'+item.visitor_id+'"><input type="hidden" name="activity_id" id="activity_id" value="'+item.activity_id+'"> <input type="hidden" name="status_value" id="status_value" value="'+item.status+'"><button class="btn btn-sm btn-success" value="active">Active</button></form>';
                 }else if(item.status == 'inactive')
                 {    
-                    var status = ' <form action="/updateActivityStatus" method="POST"> <input type="hidden" name="_token" id="csrf-token" value="{{ Session::token() }}" /> <input name="_method" type="hidden" value="PUT"> <input type="hidden" name="officer_id" id="officer_id" value="'+item.officer_id+'"><input type="hidden" name="visitor_id" id="visitor_id" value="'+item.visitor_id+'"><input type="hidden" name="activity_id" id="activity_id" value="'+item.activity_id+'"> <input type="hidden" name="status_value" id="status_value" value="'+item.status+'"><button class="btn btn-sm btn-danger" value="active">InActive</button></form>';
+                    var status = ' <form action="/updateActivityStatus" method="POST"> <input type="hidden" name="_token" id="csrf-token" value="'+token_id+'" /> <input name="_method" type="hidden" value="PUT"> <input type="hidden" name="officer_id" id="officer_id" value="'+item.officer_id+'"><input type="hidden" name="visitor_id" id="visitor_id" value="'+item.visitor_id+'"><input type="hidden" name="activity_id" id="activity_id" value="'+item.activity_id+'"> <input type="hidden" name="status_value" id="status_value" value="'+item.status+'"><button class="btn btn-sm btn-danger" value="active">InActive</button></form>';
                 }else{
                     var status = '<button class="btn btn-sm btn-warning">Cancelled</button>';   
                 }
 
-                var action ='<div class="row"><div class="col-lg-4 col-xl-5 col-md-12 col-sm-12 col"><button type="button" class="btn btn-info btn-sm" id="updatebutton" data-bs-toggle="modal" data-bs-target="#updateActivity" value="'+item.activity_id+'">Update</button></div><div class="col-lg-5 col-xl-5 col-md-12 col-sm-12"><form action="\cancelActivity" method="POST"><input type="hidden" name="_token" id="csrf-token" value="{{ Session::token() }}" /><input name="_method" type="hidden" value="PUT"><button class="btn btn-sm btn-danger" name="activity_id"  value="'+item.activity_id+'">Cancel</button></form></div></div>';
+                var action ='<div class="row"><div class="col-lg-4 col-xl-5 col-md-12 col-sm-12 col"><button type="button" class="btn btn-info btn-sm" id="updatebutton" data-bs-toggle="modal" data-bs-target="#updateActivity" value="'+item.activity_id+'">Update</button></div><div class="col-lg-5 col-xl-5 col-md-12 col-sm-12"><form action="\cancelActivity" method="POST"><input type="hidden" name="_token" id="csrf-token" value="'+token_id+'" /><input name="_method" type="hidden" value="PUT"><button class="btn btn-sm btn-danger" name="activity_id"  value="'+item.activity_id+'">Cancel</button></form></div></div>';
              
                     
-                $('#activity_table').append('<tr><td>'+i +'</td><td>'+ item.officer_first_name+' '+item.officer_last_name+'</td><td>'+item.visitor_first_name+' '+item.visitor_last_name +'</td><td>'+ item.name+'</td> <td>'+ type+'</td><td>'+status +'</td><td>'+item.date +'</td><td>'+item.start_time +'</td><td>'+item.end_time +'</td><td>'+action +'</td></tr>');
+                $('#activity_table').append('<tr><td>'+i +'</td><td>'+ item.officer_first_name+' '+item.officer_last_name+'</td><td>'+name +'</td><td>'+ item.name+'</td> <td>'+ type+'</td><td>'+status +'</td><td>'+item.date +'</td><td>'+item.start_time +'</td><td>'+item.end_time +'</td><td>'+action +'</td></tr>');
                     i++;
                 });
             }
@@ -218,6 +241,16 @@ $(document).ready(function(){
                 $('#activity_table').html(' ');
                 $.each(response,function(index,item){
 
+                    if(item.visitor_first_name == null && item.visitor_last_name == null)
+                    {
+                        var name = " ";
+                        
+                    }
+                    else
+                    {
+                        var name  = item.visitor_first_name+' '+item.visitor_last_name;
+                    }
+
                 if (item.type == 'Appointment')
                 {
                    var type = '<button class="btn btn-primary btn-sm">Appointment</button>';
@@ -233,18 +266,18 @@ $(document).ready(function(){
 
                 if (item.status == 'active')
                 {
-                    var status = ' <form action="/updateActivityStatus" method="POST"> <input type="hidden" name="_token" id="csrf-token" value="{{ Session::token() }}" /> <input name="_method" type="hidden" value="PUT"> <input type="hidden" name="officer_id" id="officer_id" value="'+item.officer_id+'"><input type="hidden" name="visitor_id" id="visitor_id" value="'+item.visitor_id+'"><input type="hidden" name="activity_id" id="activity_id" value="'+item.activity_id+'"> <input type="hidden" name="status_value" id="status_value" value="'+item.status+'"><button class="btn btn-sm btn-success" value="active">Active</button></form>';
+                    var status = ' <form action="/updateActivityStatus" method="POST"> <input type="hidden" name="_token" id="csrf-token" value="'+token_id+'" /> <input name="_method" type="hidden" value="PUT"> <input type="hidden" name="officer_id" id="officer_id" value="'+item.officer_id+'"><input type="hidden" name="visitor_id" id="visitor_id" value="'+item.visitor_id+'"><input type="hidden" name="activity_id" id="activity_id" value="'+item.activity_id+'"> <input type="hidden" name="status_value" id="status_value" value="'+item.status+'"><button class="btn btn-sm btn-success" value="active">Active</button></form>';
                 }else if(item.status == 'inactive')
                 {    
-                    var status = ' <form action="/updateActivityStatus" method="POST"> <input type="hidden" name="_token" id="csrf-token" value="{{ Session::token() }}" /> <input name="_method" type="hidden" value="PUT"> <input type="hidden" name="officer_id" id="officer_id" value="'+item.officer_id+'"><input type="hidden" name="visitor_id" id="visitor_id" value="'+item.visitor_id+'"><input type="hidden" name="activity_id" id="activity_id" value="'+item.activity_id+'"> <input type="hidden" name="status_value" id="status_value" value="'+item.status+'"><button class="btn btn-sm btn-danger" value="active">InActive</button></form>'; 
+                    var status = ' <form action="/updateActivityStatus" method="POST"> <input type="hidden" name="_token" id="csrf-token" value="'+token_id+'" /> <input name="_method" type="hidden" value="PUT"> <input type="hidden" name="officer_id" id="officer_id" value="'+item.officer_id+'"><input type="hidden" name="visitor_id" id="visitor_id" value="'+item.visitor_id+'"><input type="hidden" name="activity_id" id="activity_id" value="'+item.activity_id+'"> <input type="hidden" name="status_value" id="status_value" value="'+item.status+'"><button class="btn btn-sm btn-danger" value="active">InActive</button></form>'; 
                 }else{
                     var status = '<button class="btn btn-sm btn-warning">Cancelled</button>';   
                 }
 
-                var action ='<div class="row"><div class="col-lg-4 col-xl-5 col-md-12 col-sm-12 col"><button type="button" class="btn btn-info btn-sm" id="updatebutton" data-bs-toggle="modal" data-bs-target="#updateActivity" value="'+item.activity_id+'">Update</button></div><div class="col-lg-5 col-xl-5 col-md-12 col-sm-12"><form action="\cancelActivity" method="POST"><input type="hidden" name="_token" id="csrf-token" value="{{ Session::token() }}" /><input name="_method" type="hidden" value="PUT"><button class="btn btn-sm btn-danger" name="activity_id"  value="'+item.activity_id+'">Cancel</button></form></div></div>';
+                var action ='<div class="row"><div class="col-lg-4 col-xl-5 col-md-12 col-sm-12 col"><button type="button" class="btn btn-info btn-sm" id="updatebutton" data-bs-toggle="modal" data-bs-target="#updateActivity" value="'+item.activity_id+'">Update</button></div><div class="col-lg-5 col-xl-5 col-md-12 col-sm-12"><form action="\cancelActivity" method="POST"><input type="hidden" name="_token" id="csrf-token" value="'+token_id+'" /><input name="_method" type="hidden" value="PUT"><button class="btn btn-sm btn-danger" name="activity_id"  value="'+item.activity_id+'">Cancel</button></form></div></div>';
              
                     
-                $('#activity_table').append('<tr><td>'+i +'</td><td>'+ item.officer_first_name+' '+item.officer_last_name+'</td><td>'+item.visitor_first_name+' '+item.visitor_last_name +'</td><td>'+ item.name+'</td> <td>'+ type+'</td><td>'+status +'</td><td>'+item.date +'</td><td>'+item.start_time +'</td><td>'+item.end_time +'</td><td>'+action +'</td></tr>');
+                $('#activity_table').append('<tr><td>'+i +'</td><td>'+ item.officer_first_name+' '+item.officer_last_name+'</td><td>'+name+'</td><td>'+ item.name+'</td> <td>'+ type+'</td><td>'+status +'</td><td>'+item.date +'</td><td>'+item.start_time +'</td><td>'+item.end_time +'</td><td>'+action +'</td></tr>');
                     i++;
                 });
             }

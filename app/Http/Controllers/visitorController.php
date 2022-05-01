@@ -105,4 +105,9 @@ class visitorController extends Controller
         'data'=>$data,
     ]);
    }
+
+   function totalVisitors()
+   {
+       return Visitor::count();
+   }
 }

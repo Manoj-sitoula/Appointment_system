@@ -28,6 +28,7 @@ Route::get('/getOfficerDetail/{id}',[officerController::class,'getOfficerDetail'
 Route::get('/getAppointments/{id}',[officerController::class,'getAppointments'])->name('getAppointments');
 Route::put('/updateOfficer',[officerController::class,'updateOfficer'])->name('updateOfficer');
 Route::put('/updateOfficerStatus',[officerController::class,'updateOfficerStatus'])->name('updateOfficerStatus');
+Route::get('/totalOfficers',[officerController::class,'totalOfficers'])->name('totalOfficers');
 
 // for Visitor
 Route::get('/visitor',[visitorController::class,'getVisitorsDetails'])->name('visitor');
@@ -36,6 +37,7 @@ Route::get('/getVisitorDetail/{id}',[visitorController::class,'getVisitorDetail'
 Route::get('/getVisitorAppointments/{id}',[visitorController::class,'getVisitorAppointments'])->name('getVisitorAppointments');
 Route::put('/updateVisitor',[visitorController::class,'updateVisitor'])->name('updateVisitor');
 Route::put('/updateVisitorStatus',[visitorController::class,'updateVisitorStatus'])->name('updateVisitorStatus');
+Route::get('/totalVisitors',[visitorController::class,'totalVisitors'])->name('totalVisitors');
 
 // for Activity
 Route::get('/activity',[\App\Http\Controllers\activityController::class,'getActivitiesDetails'])->name('activity');
@@ -45,4 +47,5 @@ Route::put('/updateActivityStatus',[activityController::class,'updateActivitySta
 Route::put('/cancelActivity',[activityController::class,'cancelActivity'])->name('cancelActivity');
 Route::get('/getActivityDetail/{id}',[activityController::class,'getActivityDetail'])->name('getActivityDetail');
 Route::get('/searchResult',[activityController::class,'searchResult'])->name('searchResult');
+Route::get('/totalAppointments',[activityController::class,'totalAppointments'])->name('totalAppointments');
 

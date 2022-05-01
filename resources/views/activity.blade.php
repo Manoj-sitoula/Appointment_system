@@ -1,7 +1,6 @@
 @extends('shared.header')
 @section('content')
 	
-<meta name="csrf-token" content="{{ csrf_token() }}">
 <nav class="breadcrumb">
     <span class="breadcrumb-item" >Dashboard</span>
     <span class="breadcrumb-item" >Activities</span>
@@ -196,7 +195,7 @@
                             <div class="form-group">
                                 <label for="officer_first_name">Officer Name<span class="text-danger">*</span></label>
                                 <select class="chosen form-select" searchable="Search here.." name="officer_id">
-                                    <option value="" disabled selected>Select Officer</option>
+                                    <option  disabled selected>Select Officer</option>
                                     @foreach ( $value['b'] as $res)
                                         @if ($res->officer_status == 'inactive')
                                         {
@@ -212,8 +211,8 @@
                         <div class="col">
                             <div class="form-group">
                                 <label for="officer_first_name">Visitor Name<span class="text-danger">*</span></label>
-                                <select class=" chosen form-select" searchable="Search here.." name="visitor_id">
-                                    <option value="" disabled selected>Select Visitor</option>
+                                <select class=" chosen form-select" searchable="Search here.." name="visitor_id" value="null">
+                                    <option value="" selected>Select Visitor</option>
                                     @foreach ( $value['c'] as $res)
                                     @if ($res->visitor_status == 'inactive')
                                         {

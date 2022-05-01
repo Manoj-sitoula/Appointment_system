@@ -31,7 +31,6 @@ class activityController extends Controller
         
         $obj = new Activity();
 
-
         if($request->type == "Appointment")
         {
             $request->validate([
@@ -94,16 +93,14 @@ class activityController extends Controller
                 $date = $value->date;
                 $starttime = $value->start_time;
                 $endtime = $value->end_time;
-            }
-
+            
             if($isInWorkDay)
             {
-                if($request->start_time >= $officerWorkStartTime && $request-> end_time <= $officerWorkEndTime)
+                if($request->start_time >= $officerWorkStartTime && $request->end_time <= $officerWorkEndTime)
                 {
-                    
                     if($request->date == $date)
                     {
-                        if( $request->officer_id == $officerid || $request->visitor_id == $visitorid || $request->visitor_id == null)
+                        if( $request->officer_id == $officerid || $request->visitor_id == $visitorid)
                         {
                             if($status != "cancelled")
                             {
@@ -126,6 +123,7 @@ class activityController extends Controller
                                 }else{
                                     return redirect()->back()->with('error','Officer or Visitor already has Appointment or Officer is on Break or Leave.');
                                 }
+
                             }else{
                                 $obj->officer_id = $request->officer_id;
                                     $obj->visitor_id = $request->visitor_id;
@@ -140,24 +138,23 @@ class activityController extends Controller
                                     $obj->save();
 
                                     return redirect()->back()->with('success','You have successfully Inserted an Activity');
-
                             }
                             
                         }else
                         {
-                                $obj->officer_id = $request->officer_id;
-                                $obj->visitor_id = $request->visitor_id;
-                                $obj->name = $request->name;
-                                $obj->type = $request->type;
-                                $obj->status = $request->status;
-                                $obj->date = $request->date;
-                                $obj->start_time = $request->start_time;
-                                $obj->end_time = $request->end_time;
-                                $obj->added_on = date("Y-m-d h:i:s",time());
+                            $obj->officer_id = $request->officer_id;
+                            $obj->visitor_id = $request->visitor_id;
+                            $obj->name = $request->name;
+                            $obj->type = $request->type;
+                            $obj->status = $request->status;
+                            $obj->date = $request->date;
+                            $obj->start_time = $request->start_time;
+                            $obj->end_time = $request->end_time;
+                            $obj->added_on = date("Y-m-d h:i:s",time());
 
-                                $obj->save();
+                            $obj->save();
 
-                                return redirect()->back()->with('success','You have successfully Inserted an Activity');
+                            return redirect()->back()->with('success','You have successfully Inserted an Activity');
                         }
                     }else
                     {
@@ -184,6 +181,7 @@ class activityController extends Controller
             {
                 return redirect()->back()->with('error',' Officer is not availabe.');
             }
+        }
         }else
         {
             $obj->officer_id = $request->officer_id;
@@ -276,6 +274,7 @@ class activityController extends Controller
                 
                 if($request->newdate == $date)
                 {
+                    
                     if($request->newvisitor_id == $visitorid || $request->newofficer_id == $officerid)
                     {
                         if(((strtotime("$request->newstart_time") < strtotime("$starttime") && strtotime("$request->newend_time") < strtotime("$starttime")) || (strtotime("$request->newstart_time") > strtotime("$endtime") && strtotime("$request->newend_time") > strtotime("$endtime"))) && (strtotime("$request->newstart_time") < strtotime("$request->newend_time")))

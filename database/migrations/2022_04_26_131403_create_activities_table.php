@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('activities', function (Blueprint $table) {
-            $table->unsignedBigInteger('activity_id')->primary();
+            $table->unsignedBigInteger('activity_id')->primary()->autoIncrement();
             $table->unsignedBigInteger('officer_id');
             $table->foreign('officer_id')->references('id')->on('officers');
             $table->unsignedBigInteger('visitor_id')->nullable();

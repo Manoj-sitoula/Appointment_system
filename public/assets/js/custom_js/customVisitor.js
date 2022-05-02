@@ -32,7 +32,6 @@ $(document).ready(function(){
             type:"GET",
             url:"getVisitorAppointments/"+user_id,
             success:function(response){
-                console.log(response);
                 $.each(response,function(index,item){
                     $.each(item,function(key, value){ 
                         if(value.status == 'active')
